@@ -1,0 +1,84 @@
+---
+- hosts: prod
+  become: true
+  become_user: appjenkins
+  become_method: sudo
+  #roles:
+  #  - install_docker
+
+  vars:
+    DEVAR: X
+    DIR_DEPLOY: "{{project}}"
+    TARGET_DEPLOY_USER: appjenkins
+    TARGET_DEPLOY_PATH: "/home/{{TARGET_DEPLOY_USER}}/temp-dev"
+    ZIP_NAME: "{{project}}.zip"
+
+  tasks:
+    - name: Clean existing zip at destination
+      shell: "rm -f {{ZIP_NAME}}"
+      become: true
+      become_user: "{{ansible_user}}"
+      args:
+        chdir: "{{TARGET_DEPLOY_PATH}}"
+
+    - name: Clean existing directory
+      shell: "rm -Rf {{DIR_DEPLOY}}"
+      become: true
+      become_user: root
+      become_method: sudo
+      args:
+        chdir: "{{TARGET_DEPLOY_PATH}}"
+
+    - name: Copy zip file
+      copy: src="../{{ZIP_NAME}}" dest="{{TARGET_DEPLOY_PATH}}"
+
+
+    # May required for EC2 instance deployment
+    #- name: Clean existing zip at destination (deployment)
+    #  shell: "rm -f {{ZIP_NAME}}"
+    #  become: true
+    #  become_user: root
+    #  become_method: sudo
+    #  args:
+    #    chdir: "{{TARGET_DEPLOY_PATH}}/"
+#
+    #- name: Clean existing directory (deployment)
+    #  shell: "rm -Rf {{DIR_DEPLOY}}"
+    #  become: true
+    #  become_user: root
+    #  become_method: sudo
+    #  args:
+    #    chdir: "{{TARGET_DEPLOY_PATH}}/"
+#
+    #- name: Copy to deployment user environment
+    #  shell: "mv {{ZIP_NAME}} {{TARGET_DEPLOY_PATH}}/"
+    #  become: true
+    #  become_user: root
+    #  become_method: sudo
+    #  args:
+    #    chdir: "/home/{{ansible_user}}/temp"
+    # End of May required for EC2 instance deployment
+
+    - name: Unzip file at destination
+      shell: "unzip {{ZIP_NAME}} -d {{DIR_DEPLOY}}"
+      become: true
+      become_user: "{{ansible_user}}"
+      become_method: sudo
+      args:
+        chdir: "{{TARGET_DEPLOY_PATH}}/"
+
+    - name: Change files ownership
+      shell: "chown www-data:www-data -R {{DIR_DEPLOY}}"
+      become: true
+      become_user: root
+      become_method: sudo
+      args:
+        chdir: "{{TARGET_DEPLOY_PATH}}/"
+
+    - name: Deploy to nginx folder
+      shell: "cp -R {{DIR_DEPLOY}} /var/www/"
+      become: true
+      become_user: root
+      become_method: sudo
+      args:
+        chdir: "{{TARGET_DEPLOY_PATH}}/"
