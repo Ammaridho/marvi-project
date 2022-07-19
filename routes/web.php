@@ -69,21 +69,36 @@ Route::namespace('Arvi')->group(function(){
 
             Route::middleware('auth')->group(function()
             {
+
                 //home
                 Route::get('/home','DashBoardController@home')->name('home-dashboard');
-                
-                //orderList
-                Route::get('/order','DashBoardController@orderList')->name('order-dashboard');
 
-                //production plan
-                Route::get('/productionPlan','DashBoardController@productionPlanList')->name('production-plan-dashboard');
-                
-                //delivery order point
-                Route::get('/deliveryOrderPoint','DashBoardController@deliveryDropPointList')->name('delivery-order-dashboard');
-                
-                //products
-                Route::get('/product','DashBoardController@productList')->name('product-dashboard');
+                Route::namespace('TabReports')->group(function(){
 
+                    //orderList
+                    Route::get('/order','TabOrderController@orderList')->name('order-dashboard');
+
+                    //export orderlist to excel
+                    Route::get('/order/export', 'TabOrderController@OrderListExportExcel')->name('order-list-export-excel');
+                    
+                    //production plan
+                    Route::get('/productionPlan','TabProductionPlanController@productionPlanList')->name('production-plan-dashboard');
+                    
+                    //export orderlist to excel
+                    Route::get('/productionPlan/export', 'TabProductionPlanController@ProductionPlanExportExcel')->name('production-plan-export-excel');
+                    
+                    //delivery order point
+                    Route::get('/deliveryOrderPoint','TabDeliveryDropPointController@deliveryDropPointList')->name('delivery-order-dashboard');
+                
+                });
+
+                Route::namespace('TabProducts')->group(function(){
+                    
+                    //products
+                    Route::get('/product','DashBoardController@productList')->name('product-dashboard');
+
+                });
+                
                 //logout
                 Route::post('/logout','AuthController@logout')->name('logout-dashboard');
 

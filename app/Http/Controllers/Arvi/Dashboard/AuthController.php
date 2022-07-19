@@ -13,6 +13,7 @@ use Session;
 
 class AuthController extends Controller
 {
+    
     public function formLogin(Request $request)
     {
         $qrCode = $request->qrCode;

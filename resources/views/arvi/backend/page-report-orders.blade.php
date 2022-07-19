@@ -25,7 +25,14 @@
               </form>
             </div>
             {{-- <button id="btnExport" onclick="fnExcelReport();"> EXPORT </button> --}}
-            <div class=" my-1"><button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="exportTableToExcel('table_order', 'table_order_{{ $noww->format('d-m-Y') }}')"><i class="menu-icon tf-icons bx bx-download"></i> Export</button></div>
+            {{-- <div class=" my-1"><button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="exportTableToExcel('table_order', 'table_order_{{ $noww->format('d-m-Y') }}')"><i class="menu-icon tf-icons bx bx-download"></i> Export</button></div> --}}
+            <div class=" my-1">
+              <a href="{{ route('order-list-export-excel',['qrCode' => $qrCode]) }}">
+                <button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="return confirm('export excel?')">
+                  <i class="menu-icon tf-icons bx bx-download"></i> Export
+                </button>
+              </a>
+            </div>
           </div>
       </div>
     </div>

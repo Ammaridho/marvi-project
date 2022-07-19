@@ -18,7 +18,7 @@
         $('#dashboard-button').on('click',function () {
             $('.menu-item.active').removeClass('active');
             $(this).parent().addClass('active');
-            $.get("{{ secure_url(route('home-dashboard',['qrCode' => $qrCode])) }}",function (data) {
+            $.get("{{ secure_url(route('home-dashboard', ['qrCode' => $qrCode], true)) }}",function (data) {
                 $('#contentDashboard').html(data);
             })
         })
@@ -26,7 +26,7 @@
         $('#order-button').on('click',function () {
             $('.menu-item.active').removeClass('active');
             $(this).parent().addClass('active');
-            $.get("{{ secure_url(route('order-dashboard',['qrCode' => $qrCode])) }}",function (data) {
+            $.get("{{ secure_url(route('order-dashboard',['qrCode' => $qrCode], true)) }}",function (data) {
                 $('#contentDashboard').html(data);
             })
         })
@@ -34,7 +34,7 @@
         $('#product-plan-button').on('click',function () {
             $('.menu-item.active').removeClass('active');
             $(this).parent().addClass('active');
-            $.get("{{ secure_url(route('production-plan-dashboard',['qrCode' => $qrCode])) }}",function (data) {
+            $.get("{{ secure_url(route('production-plan-dashboard',['qrCode' => $qrCode], true)) }}",function (data) {
                 $('#contentDashboard').html(data);
             })
         })

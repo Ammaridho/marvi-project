@@ -7,7 +7,14 @@
       <div class="me-2">
           <div class="d-flex justify-content-end flex-sm-row flex-column">
             {{-- <div class=" my-1"><button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="exportTableToExcel('table_production_plan', 'table_production_plan_{{ $noww->format('d-m-Y') }}')"><i class="menu-icon tf-icons bx bx-download"></i> Export</button></div> --}}
-            <div class=" my-1"><button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="fnExcelReport();"><i class="menu-icon tf-icons bx bx-download"></i> Export</button></div>
+            {{-- <div class=" my-1"><button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="fnExcelReport();"><i class="menu-icon tf-icons bx bx-download"></i> Export</button></div> --}}
+            <div class=" my-1">
+              <a href="{{ route('production-plan-export-excel',['qrCode' => $qrCode]) }}">
+                <button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="return confirm('export excel?')">
+                  <i class="menu-icon tf-icons bx bx-download"></i> Export
+                </button>
+              </a>
+            </div>
           </div>
       </div>
     </div>
@@ -59,43 +66,7 @@
           });
           $(`td.tgls-${i}`).text(sum);   
       }
-      // export table
   })
-  // function exportTableToExcel(tableID, filename = ''){
-  //     $a = confirm('Export Excel?');
-
-  //     if ($a) {
-      
-  //         var downloadLink;
-  //         var dataType = 'application/vnd.ms-excel';
-  //         var tableSelect = document.getElementById(tableID);
-  //         var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-          
-  //         // Specify file name
-  //         filename = filename?filename+'.xls':'excel_data.xls';
-          
-  //         // Create download link element
-  //         downloadLink = document.createElement("a");
-          
-  //         document.body.appendChild(downloadLink);
-          
-  //         if(navigator.msSaveOrOpenBlob){
-  //             var blob = new Blob(['\ufeff', tableHTML], {
-  //                 type: dataType
-  //             });
-  //             navigator.msSaveOrOpenBlob( blob, filename);
-  //         }else{
-  //             // Create a link to the file
-  //             downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-          
-  //             // Setting the file name
-  //             downloadLink.download = filename;
-              
-  //             //triggering the function
-  //             downloadLink.click();
-  //         }
-  //     }
-  // }
   function fnExcelReport()
   {
     $a = confirm('Export Excel?');
