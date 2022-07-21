@@ -8,7 +8,7 @@
 
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
 
-                <div class="small fw-normal">Last update time: {{ $noww->format('d-m-Y h:m') }}</div>
+                <div class="small fw-normal">Last update time: {{ $noww->format('d-m-Y h:m:s') }}</div>
 
                 <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <!-- User -->

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Arvi;
 
 use App\Http\Controllers\Controller;
 use App\Models\ArviDelivery;
+use App\Models\ArviDeliveryType;
 use App\Models\MerchantDefinedDelivery;
 use App\Models\MerchantOrder;
 use App\Models\MerchantOrderDetail;
@@ -105,6 +106,7 @@ class PaymentController extends Controller
         $revor      = $request->get(OTFController::PARAM_DELIVERY_POINT);
         $paymId     = $request->get(OTFController::PARAM_MERCHANT_PAYMENT_METHOD);
         $date       = $request->get('datej');
+        $dType      = $request->has('dtype') ? $request->get('dtype') : ArviDeliveryType::DROP_TO_PICKUP;
 
         //Get info on Payment method
         $_mPayment = MerchantPayment::find($paymId);
@@ -133,6 +135,7 @@ class PaymentController extends Controller
         $newOrder->payment_provider_id = $_mPayment->payment_provider_id;
         //default
         $newOrder->delivery_id = ArviDelivery::ARVI;
+        $newOrder->delivery_type = $dType;
 
         $d = Carbon::parse($date);
         $newOrder->day_deliver = $d->format('Y-m-d');

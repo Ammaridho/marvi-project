@@ -7,14 +7,14 @@
       <div class="me-2">
           <div class="d-flex justify-content-end flex-sm-row flex-column">
             {{-- <div class=" my-1"><button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="exportTableToExcel('table_production_plan', 'table_production_plan_{{ $noww->format('d-m-Y') }}')"><i class="menu-icon tf-icons bx bx-download"></i> Export</button></div> --}}
-            {{-- <div class=" my-1"><button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="fnExcelReport();"><i class="menu-icon tf-icons bx bx-download"></i> Export</button></div> --}}
-            <div class=" my-1">
+            <div class=" my-1"><button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="fnExcelReport();"><i class="menu-icon tf-icons bx bx-download"></i> Export</button></div>
+            {{-- <div class=" my-1">
               <a href="{{ route('production-plan-export-excel',['qrCode' => $qrCode]) }}">
                 <button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="return confirm('export excel?')">
                   <i class="menu-icon tf-icons bx bx-download"></i> Export
                 </button>
               </a>
-            </div>
+            </div> --}}
           </div>
       </div>
     </div>
@@ -72,7 +72,8 @@
     $a = confirm('Export Excel?');
 
       if ($a) {
-        var tab_text="<table border='2px'><tr bgcolor='#87AFC6'>";
+        var date = "{{ $noww->format('D, d-M-Y h:m:s') }}";
+        var tab_text=`<table border='2px'><tr>Last update : ${date}`;
         var textRange; var j=0;
         tab = document.getElementById('table_production_plan'); // id of table
 
@@ -96,7 +97,7 @@
             txtArea1.document.write(tab_text);
             txtArea1.document.close();
             txtArea1.focus(); 
-            sa=txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xls");
+            sa=txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xlsx");
         }  
         else                 //other browser not tested on IE 11
             sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  

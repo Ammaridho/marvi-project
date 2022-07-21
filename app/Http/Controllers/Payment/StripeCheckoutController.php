@@ -3,14 +3,24 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Arvi\OFTCustomerFailedOrder;
+use App\Mail\Arvi\OFTCustomerSuccessOrder;
+use App\Mail\Payload\FailedOrderMailPayload;
+use App\Mail\Payload\SuccessOrderMailPayload;
+use App\Models\Merchant;
 use App\Models\MerchantOrder;
+use App\Models\MerchantOrderDetail;
+use App\Models\MerchantProduct;
 use App\Models\Payments\ArviPaymentMethod;
+use App\Models\Payments\ArviPaymentProvider;
 use App\Models\Payments\ArviPaymentStatus;
 use App\Models\Payments\MerchantPayment;
 use App\Models\Payments\StripeArviCheckout;
 use App\Models\Payments\StripeArviEntryCheckout;
 use App\Services\StripeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Stripe Payment controller, based on:
@@ -59,6 +69,53 @@ class StripeCheckoutController extends Controller
         if ($ord->payment_status == ArviPaymentStatus::NEW) {
             $ord->payment_status = ArviPaymentStatus::PAID;
             $ord->save();
+
+            //Only send if success and has email
+            try {
+                $merchant =  Merchant::find($ord->merchant_id);
+                if (isset( $ord->email )) {
+                    $entry = new SuccessOrderMailPayload();
+                    $entry->name = $ord->name;
+                    $entry->email = $ord->email;
+                    $entry->telephone = $ord->mobile_number;
+                    $entry->orderNumber = $ord->arvi_session_id;
+                    $entry->merchantCode = '';
+                    if ($merchant) {
+                        $entry->merchant = $merchant->name;
+                        $entry->merchantCode = $merchant->code;
+                        $entry->urlBuy = url('/m/' . $merchant->code);
+                    }
+                    $entry->paymentMethod = $payment;
+                    $entry->paymentProvider = ArviPaymentProvider::resolveName($ord->payment_provider_id);
+
+                    //Get info on purchase details
+                    $items = MerchantOrderDetail::where('merchant_id',$ord->merchant_id)
+                                ->where('merchant_order_id',$ord->id)
+                                ->get();
+                    $products = array();
+                    foreach ($items as $_i) {
+                        $p = MerchantProduct::getById($_i->product_id);
+                        $li = new \stdClass();
+                        $li->qty = $_i->qty;
+                        $li->currency = $_i->currency;
+                        $li->productPrice = $_i->selling_price;
+                        if ($p) {
+                            $li->productName = $p->name;
+                        }
+                        $products[] = $li;
+                    }
+                    $entry->products = $products;
+
+                    Mail::to($ord->email)
+                        ->send(new OFTCustomerSuccessOrder($entry));
+
+                    Log::info("Sent email to: {$ord->email}. Order#: {$entry->orderNumber}");
+
+                }
+            } catch (\Exception $exception) {
+                Log::error("Error sending success email to: {$ord->email}. Message: {$exception->getMessage()}");
+            }
+
         }
         return view('arvi.frontend.stripe.success', compact('ord','payment'));
     }
@@ -82,6 +139,35 @@ class StripeCheckoutController extends Controller
         if ($ord->payment_status == ArviPaymentStatus::NEW) {
             $ord->payment_status = ArviPaymentStatus::FAILED;
             $ord->save();
+
+
+            //Only send if just set to failed and has email
+            try {
+                $merchant =  Merchant::find($ord->merchant_id);
+                if (isset( $ord->email )) {
+                    $entry = new FailedOrderMailPayload();
+                    $entry->name = $ord->name;
+                    //$entry->email = $ord->email;
+                    //$entry->telephone = $ord->mobile_number;
+                    $entry->orderNumber = $ord->arvi_session_id;
+                    $entry->merchantCode = '';
+                    if ($merchant) {
+                        $entry->merchant = $merchant->name;
+                        $entry->merchantCode = $merchant->code;
+                        $entry->urlBuy = url('/m/' . $merchant->code);
+                    }
+
+                    //Get info on purchase details
+                    Mail::to($ord->email)
+                        ->send(new OFTCustomerFailedOrder($entry));
+
+                    Log::info("Sent failed purchase email to: {$ord->email}. Order#: {$entry->orderNumber}");
+
+                }
+            } catch (\Exception $exception) {
+                Log::error("Error sending failed email to: {$ord->email}. Message: {$exception->getMessage()}");
+            }
+
         }
         return view('arvi.frontend.stripe.failed', compact('ord','payment'));
     }

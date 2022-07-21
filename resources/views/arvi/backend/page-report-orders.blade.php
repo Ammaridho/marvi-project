@@ -20,18 +20,16 @@
             <div class="me-2 my-1"><input type="text" id="dateRange" name="dateRange" class="form-control form-control-custom" /></div>
             <div class="me-2 my-1">
               <form class="d-flex" onsubmit="return false">
-                <input class="form-control form-control-custom me-2" onkeyup="searchData()" id="input-search" type="search" placeholder="Search" aria-label="Search" autocomplete="off" />
+                <input class="form-control form-control-custom me-2" onkeyup="searchData()" id="input-search" type="search" placeholder="Order-ID/Order-Date/Delivery-Date/Name/Email/Phone/Delivery-Type/Address" aria-label="Search" autocomplete="off" />
                 {{-- <button class="btn btn-sm btn-outline-primary pe-2" id="btnSubmitSearch" type="submit"><i class="menu-icon tf-icons bx bx-search-alt"></i></button> --}}
               </form>
             </div>
             {{-- <button id="btnExport" onclick="fnExcelReport();"> EXPORT </button> --}}
             {{-- <div class=" my-1"><button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="exportTableToExcel('table_order', 'table_order_{{ $noww->format('d-m-Y') }}')"><i class="menu-icon tf-icons bx bx-download"></i> Export</button></div> --}}
             <div class=" my-1">
-              <a href="{{ route('order-list-export-excel',['qrCode' => $qrCode]) }}">
-                <button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="return confirm('export excel?')">
+                <button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="exportExcel()">
                   <i class="menu-icon tf-icons bx bx-download"></i> Export
                 </button>
-              </a>
             </div>
           </div>
       </div>
@@ -60,9 +58,9 @@
 
         <div class="data-order" id="data-order">
             
-          <tr id="order-list" class="od-{{ date("d-m-Y", strtotime($item->create_time)) }} dd-{{ date("d-m-Y", strtotime($item->day_deliver)) }}  all-order">
+          <tr id="order-list" class="od-{{ date("d-m-Y", strtotime($item->create_time)) }} dd-{{ date("d-m-Y", strtotime($item->day_deliver)) }}  all-order" data-id="{{ $item->id }}">
             <td>{{ $item->id }}</td>
-            <td>{{ date("d-m-Y", strtotime($item->create_time)) }}</td>
+            <td>{{ date("d-m-Y h:m:s", strtotime($item->create_time)) }}</td>
             <td>{{ date("d-m-Y", strtotime($item->day_deliver)) }}</td>
             <td class="text-nowrap">{{ $item->name }}</td>
             <td>{{ $item->email }}</td>
@@ -143,76 +141,32 @@
 </div>
 
 <script>
-//   function fnExcelReport()
-// {
-//     var tab_text="<table border='2px'><tr bgcolor='#87AFC6'>";
-//     var textRange; var j=0;
-//     tab = document.getElementById('table_order'); // id of table
+  // export excel
+  function exportExcel(params) {
 
-//     for(j = 0 ; j < tab.rows.length ; j++) 
-//     {     
-//         tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
-//         //tab_text=tab_text+"</tr>";
-//     }
+    let conf = confirm('export excel?');
+    
+    if(conf){
 
-//     tab_text=tab_text+"</table>";
-//     tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
-//     tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
-//     tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+        // get all id visible data
+        var ek=[];
+        $('tr.all-order:visible').each(function() { ek.push($(this).data('id')); });
+        var dataj = JSON.stringify(ek);
 
-//     var ua = window.navigator.userAgent;
-//     var msie = ua.indexOf("MSIE "); 
+        // hard code with php
+        <?php
+        // $datap = json_decode(dataj,true);
+        $data = [1,2,10,11];
+        ?>
 
-//     if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-//     {
-//         txtArea1.document.open("txt/html","replace");
-//         txtArea1.document.write(tab_text);
-//         txtArea1.document.close();
-//         txtArea1.focus(); 
-//         sa=txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xls");
-//     }  
-//     else                 //other browser not tested on IE 11
-//         sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  
+        // let urlPhp = '{{ route('order-list-export-excel',['qrCode' => $qrCode, 'idData' => serialize($data) ]) }}';
 
-//     return (sa);
-// }
-  // export table
-  function exportTableToExcel(tableID, filename = ''){
-      $a = confirm('Export Excel?');
+        var urlJavascript = '{{ route('order-list-export-excel',['qrCode' => $qrCode]) }}'+'?idData=' + JSON.stringify(ek);
 
-      if ($a) {
-      
-          var downloadLink;
-          var dataType = 'application/vnd.ms-excel';
-          var tableSelect = document.getElementById(tableID);
-          var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-          // tableHTML.outerHTML.replace('<button----View</button>', '');
-          
-          // Specify file name
-          filename = filename?filename+'.xls':'excel_data.xls';
-          
-          // Create download link element
-          downloadLink = document.createElement("a");
-          
-          document.body.appendChild(downloadLink);
-          
-          if(navigator.msSaveOrOpenBlob){
-              var blob = new Blob(['\ufeff', tableHTML], {
-                  type: dataType
-              });
-              navigator.msSaveOrOpenBlob( blob, filename);
-          }else{
-              // Create a link to the file
-              downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-          
-              // Setting the file name
-              downloadLink.download = filename;
-              
-              //triggering the function
-              downloadLink.click();
-          }
+        window.location.href = urlJavascript;
       }
   }
+  
   // search order
   $("#input-search").on("keyup click change", function() {
     var value = $(this).val().toLowerCase();
@@ -241,7 +195,8 @@
       'Last 7 Days': [moment().subtract(6, 'days'), moment()],
       'Last 30 Days': [moment().subtract(29, 'days'), moment()],
       'This Month': [moment().startOf('month'), moment().endOf('month')],
-      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+      'Last Month': [moment().subtract(1, 'month').startOf('month'), 
+      moment().subtract(1, 'month').endOf('month')]
       }
   });
   cb(start, end);
@@ -252,7 +207,8 @@
   })
   // when date pick on click
   $('input[name="dateRange"]').on('apply.daterangepicker', function(ev, picker) {
-      getDatesInRange(new Date(picker.startDate.format('YYYY-MM-DD')), new Date(picker.endDate.format('YYYY-MM-DD')));
+      getDatesInRange(new Date(picker.startDate.format('YYYY-MM-DD')), 
+      new Date(picker.endDate.format('YYYY-MM-DD')));
   });
   function dateFormat(inputDate, format) {
       //parse the input date

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 use App\Mail\Arvi\CustomerFailOrder;
-use App\Mail\Arvi\CustomerSuccessOrder;
+use App\Mail\Arvi\OFTCustomerSuccessOrder;
 use App\Mail\Arvi\MerchantOrderEmail;
 use Illuminate\Support\Facades\Mail;
 
@@ -116,7 +116,7 @@ class TransactionController extends Controller
             'email'                 => $email,
             'telephone'             => $mobile_number,
         ];
-        Mail::to("$email")->send(new CustomerSuccessOrder($details));
+        Mail::to("$email")->send(new OFTCustomerSuccessOrder($details));
     }
 
     function customerEmailFail($email,$name)
@@ -137,5 +137,5 @@ class TransactionController extends Controller
         Mail::to("bootstrap@gmail.com")->send(new MerchantOrderEmail($details));
     }
 
-    
+
 }

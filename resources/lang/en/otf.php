@@ -16,6 +16,14 @@ return [
         'phone_invalid'  => 'Please input valid Phone number',
         'email_invalid'  => 'Please input a valid email',
     ],
-
-    'failed_payment' => "Sorry, we're unable to process payment at the moment. Please try again later"
+    'failed_payment' => "Sorry, we're unable to process payment at the moment. Please try again later",
+    'email' => [
+        'sender' => 'Oobe.ai',
+        'failed' => [
+            'subject' => '[:merchant] Order Payment Failed :order'
+        ],
+        'success' => [
+            'subject' => '[:merchant] Order Payment Success :order'
+        ]
+    ]
 ];

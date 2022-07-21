@@ -3,15 +3,31 @@
 namespace App\Exports;
 
 use App\Models\MerchantOrder;
-use Maatwebsite\Excel\Concerns\FromCollection;
 
-class MerchantOrderExport implements FromCollection
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\Exportable;
+
+class MerchantOrderExport implements FromView
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+    use Exportable;
+
+    public function __construct($noww,$joinForOrderDetails,$countProduct,$productsOrder)
     {
-        return MerchantOrder::all();
+        $this->noww                 = $noww;
+        $this->joinForOrderDetails  = $joinForOrderDetails;
+        $this->countProduct         = $countProduct;
+        $this->productsOrder        = $productsOrder;
     }
+
+    public function view(): View
+    {
+        return view('arvi.backend.export-view.order-list', [
+            'noww'                  => $this->noww,
+            'joinForOrderDetails'   => $this->joinForOrderDetails,
+            'countProduct'          => $this->countProduct,
+            'productsOrder'         => $this->productsOrder,
+        ]);
+    }
+
 }

@@ -89,13 +89,16 @@ Route::namespace('Arvi')->group(function(){
                     
                     //delivery order point
                     Route::get('/deliveryOrderPoint','TabDeliveryDropPointController@deliveryDropPointList')->name('delivery-order-dashboard');
-                
+                    
+                    //export deliverydroppoint to excel
+                    Route::get('/deliveryOrderPoint/export', 'TabDeliveryDropPointController@deliveryDropPointListExportExcel')->name('delivery-drop-point-export-excel');
+
                 });
 
                 Route::namespace('TabProducts')->group(function(){
                     
                     //products
-                    Route::get('/product','DashBoardController@productList')->name('product-dashboard');
+                    Route::get('/product','TabProductListController@productList')->name('product-dashboard');
 
                 });
                 

@@ -1,29 +1,23 @@
-{{ dd($test) }}
 <div class="card">
   <div class="d-flex justify-content-between flex-grow align-items-center">
     <div><h5 class="card-header">Delivery Drop Point</h5></div>
     <div>
       <div class="me-2">
           <div class="d-flex justify-content-end flex-sm-row flex-column">
-            <div class="me-2 my-1">
-              {{-- <button class="btn btn-sm btn-primary"id="filter" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="menu-icon tf-icons bx bx-filter"></i> Filter</button> --}}
-              {{-- <div class="dropdown-menu dropdown-menu-end" aria-labelledby="filter">
-                <a class="dropdown-item" href="javascript:void(0);">Order Date</a>
-                <a class="dropdown-item" href="javascript:void(0);">Delivery Date</a>
-              </div> --}}
-              <select class="form-select applyClass" id="typeDate" aria-label="Example select with button addon">
-                <option value="1" selected>Order Date</option>
-                <option value="2">Deliver Date</option>
-              </select>
-            </div>
-            <div class="me-2 my-1"><input type="text" id="dateRange" name="dateRange" class="form-control form-control-custom" /></div>
+            <div class="me-2 my-1"><input type="text" id="dateRange" name="dateRange" 
+                class="form-control form-control-custom" /></div>
             <div class="me-2 my-1">
               <form class="d-flex" onsubmit="return false">
-                <input class="form-control form-control-custom me-2" onkeyup="searchData()" id="input-search" type="search" placeholder="Search" aria-label="Search" autocomplete="off" />
-                {{-- <button class="btn btn-sm btn-outline-primary pe-2" id="btnSubmitSearch" type="submit"><i class="menu-icon tf-icons bx bx-search-alt"></i></button> --}}
+                <input class="form-control form-control-custom me-2" 
+                id="input-search" type="search" placeholder="No/Delivery-Date/Delivery-Address/Total-Item" 
+                aria-label="Search" autocomplete="off" />
               </form>
             </div>
-            <div class=" my-1"><button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport"><i class="menu-icon tf-icons bx bx-download"></i> Export</button></div>
+            <div class=" my-1">
+              <button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="exportExcel()">
+                <i class="menu-icon tf-icons bx bx-download"></i> Export
+              </button>
+            </div>
           </div>
       </div>
     </div>
@@ -40,7 +34,7 @@
           <th>Action</th>
         </tr>
       </thead>
-      <tbody class="table-border-bottom-0">
+      <tbody class="table-border-bottom-0" id="list-delivery-drop-point-list">
 
         @php
         $i = 1;
@@ -51,7 +45,7 @@
         @foreach ($joinForDeliveryDropPoints as $key => $item)
         
           @if (!($temp_day_deliver == $item->day_deliver && $temp_address == $item->address))
-            <tr>
+            <tr id="list-delivery-drop-point-list" class="dd-{{ date("d-m-Y", strtotime($item->day_deliver)) }}  all-list-delivery-drop-point" data-id="{{ $item->id }}">
               <td class="text-center">{{ $i }}</td>
               <td>{{ $item->day_deliver }}</td>
               <td class="w-100">{{ $item->address }}</td>
@@ -77,7 +71,10 @@
                     <tr>
                       @foreach ($products as $itemP)
                         {{-- print quantity product --}}
-                        <td class="total-{{ $i }}">{{ isset( $deliveryDropPoint[$item->day_deliver][$item->address][$item->id][$itemP->id]) ?  array_sum($deliveryDropPoint[$item->day_deliver][$item->address][$item->id][$itemP->id]) : 0 }}</td>
+                        <td class="total-{{ $i }}">
+                          {{ isset( $deliveryDropPointNew[$item->day_deliver][$item->address][$itemP->id]) ? 
+                          $deliveryDropPointNew[$item->day_deliver][$item->address][$itemP->id] : 0 }}
+                        </td>
                       @endforeach
                     </tr>
                   </table>
@@ -104,13 +101,16 @@
         <div class="d-none d-sm-none d-md-block">
           <nav>
               <ul class="pagination justify-content-end">
-                  <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
+                  <li class="page-item active" aria-current="page">
+                    <span class="page-link">1</span></li>
                   <li class="page-item"><a class="page-link" href="#">2</a></li>
                   <li class="page-item"><a class="page-link" href="#">3</a></li>
                   <li class="page-item"><a class="page-link" href="#">4</a></li>
                   <li class="page-item"><a class="page-link" href="#">5</a></li>
-                  <li class="page-item"><a class="page-link p-2" href="#"><i class="bx bx-chevron-left"></i></a></li>
-                  <li class="page-item"><a class="page-link p-2" href="#"><i class="bx bx-chevron-right"></i></a></li>
+                  <li class="page-item"><a class="page-link p-2" href="#">
+                    <i class="bx bx-chevron-left"></i></a></li>
+                  <li class="page-item"><a class="page-link p-2" href="#">
+                    <i class="bx bx-chevron-right"></i></a></li>
               </ul>
           </nav>
         </div>
@@ -129,17 +129,40 @@
 </div>
 
 <script>
-   $(document).ready(function () {
-        for (let i = 1; i <= {{ count($joinForDeliveryDropPoints) }}; i++) {
-            var sum = 0;
-            $(`td.total-${i}`).each(function () {
-                sum += Number($(this).text());
-            })
-            $(`#result-total-${i}`).text(sum);
-        }
-    })
+  $(document).ready(function () {
 
-  //View product id
+    // auto acumulation total
+    for (let i = 1; i <= {{ count($joinForDeliveryDropPoints) }}; i++) {
+      var sum = 0;
+      $(`td.total-${i}`).each(function () {
+          sum += Number($(this).text());
+      })
+      $(`#result-total-${i}`).text(sum);
+    }
+
+  })
+
+  // export excel
+  function exportExcel() {
+    let conf = confirm('export excel?');
+    if(conf){
+      // get all id visible data
+      var ek=[];
+      $('tr.all-list-delivery-drop-point:visible').each(function() { ek.push($(this).data('id')); });
+      var urlJavascript = '{{ route('delivery-drop-point-export-excel',['qrCode' => $qrCode]) }}'+'?idData=' + JSON.stringify(ek);
+      window.location.href = urlJavascript;
+    }
+  }
+
+  // search delivery drop point
+  $("#input-search").on("keyup click change", function() {
+    var value = $(this).val().toLowerCase();
+    $("#list-delivery-drop-point-list tr#list-delivery-drop-point-list").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+
+  //View detail quantity product on drop point
   $('.show-product').click(function() {
     $('.more-product').not('#blockProduct' + $(this).attr('target')).hide('');
     $('#blockProduct' + $(this).attr('target')).toggle('');
@@ -182,18 +205,21 @@
           }
       }
   }
-  // search order
-  $("#input-search").on("keyup click change", function() {
-    var value = $(this).val().toLowerCase();
-    $("#list-order tr#order-list").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
+
+  // // search drop point
+  // $("#input-search").on("keyup click change", function() {
+  //   var value = $(this).val().toLowerCase();
+  //   $("#list-order tr#order-list").filter(function() {
+  //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+  //   });
+  // });
+
   //Date range
   var start = moment().subtract(29, 'days');
   var end = moment();
   function cb(start, end) {
-      $('#dateRange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+      $('#dateRange span').html(start.format('MMMM D, YYYY') + ' - ' + 
+      end.format('MMMM D, YYYY'));
   }
   $('input[name="dateRange"]').daterangepicker({
       opens: "left",
@@ -205,18 +231,21 @@
       'Last 7 Days': [moment().subtract(6, 'days'), moment()],
       'Last 30 Days': [moment().subtract(29, 'days'), moment()],
       'This Month': [moment().startOf('month'), moment().endOf('month')],
-      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+      'Last Month': [moment().subtract(1, 'month').startOf('month'), 
+        moment().subtract(1, 'month').endOf('month')]
       }
   });
   cb(start, end);
 
   // Reset filter
   $('#reset-filter-day-order').on('click',function () {
-      $('tr.all-order').show();
+      $('tr.all-list-delivery-drop-point').show();
   })
+
   // when date pick on click
   $('input[name="dateRange"]').on('apply.daterangepicker', function(ev, picker) {
-      getDatesInRange(new Date(picker.startDate.format('YYYY-MM-DD')), new Date(picker.endDate.format('YYYY-MM-DD')));
+      getDatesInRange(new Date(picker.startDate.format('YYYY-MM-DD')), 
+      new Date(picker.endDate.format('YYYY-MM-DD')));
   });
   function dateFormat(inputDate, format) {
       //parse the input date
@@ -237,26 +266,16 @@
       format = format.replace("dd", day.toString().padStart(2,"0"));
       return format;
   }
+
+  //show date if on sort data
   function getDatesInRange(startDate, endDate) {
       // hide all order
-      $('tr.all-order').hide();
+      $('tr.all-list-delivery-drop-point').hide();
       const date = new Date(startDate.getTime());
       const dates = [];
-
-      switch ($('#typeDate').find(":selected").text()) {
-          case 'Order Date':
-              // alert('Order Date');
-              var angkerDate = 'od';
-              break;
-          case 'Deliver Date':
-              // alert('Deliver Date');
-              var angkerDate = 'dd';
-              break;
-      }
-
       while (date <= endDate) {
           // set date in choosed to display
-          $(`tr.${angkerDate}-${dateFormat(date, 'dd-MM-yyyy')}`).show();
+          $(`tr.dd-${dateFormat(date, 'dd-MM-yyyy')}`).show();
           date.setDate(date.getDate() + 1);
       }
     

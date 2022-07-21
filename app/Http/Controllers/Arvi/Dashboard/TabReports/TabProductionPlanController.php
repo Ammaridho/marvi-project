@@ -34,14 +34,18 @@ class TabProductionPlanController extends Controller
             $products = MerchantProduct::where('merchant_id',$mId)->get();
 
              // Production Plan
-             $joinForProductPlans = MerchantOrder::join('merchant_order_details','merchant_orders.id','=','merchant_order_details.merchant_order_id')
-                                            ->select('merchant_orders.day_deliver','merchant_orders.id',
-                                            'merchant_order_details.qty','merchant_order_details.product_id')
-                                            ->get();
+             $joinForProductPlans = MerchantOrder::
+                        join('merchant_order_details','merchant_orders.id','=',
+                        'merchant_order_details.merchant_order_id')
+                        ->select('merchant_orders.day_deliver','merchant_orders.id',
+                        'merchant_order_details.qty','merchant_order_details.product_id')
+                        ->get();
+
             $productPlan = [];
             $qtyp = 0;
             foreach ($joinForProductPlans as $key => $value) { //product
-                $productPlan[$value->product_id][$value->day_deliver][$value->id] = $value->qty;   
+                $productPlan[$value->product_id][$value->day_deliver][$value->id] 
+                = $value->qty;   
             }
 
             //date production plan
@@ -60,13 +64,16 @@ class TabProductionPlanController extends Controller
                     $dateH[$i] = $now->format('d-M');
                 }
             }
-            return view('arvi.backend.page-report-production-plan',compact('noww','dateA','dateH','productPlan','joinForProductPlans','products','qrCode'));
+            return view('arvi.backend.page-report-production-plan',
+                compact('noww','dateA','dateH','productPlan','joinForProductPlans',
+                    'products','qrCode'));
         }
         return view('arvi.frontend.page-not-available');
     }
 
     public function productionPlanExportExcel(Request $request)
     {
-        return Excel::download(new MerchantProductionPlanExport, 'Production_Plan_'.Carbon::now()->format('d-m-y').'.xlsx');
+        return Excel::download(new MerchantProductionPlanExport, 
+            'Production_Plan_'.Carbon::now()->format('d-m-y').'.xlsx');
     }
 }
