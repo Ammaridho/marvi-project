@@ -151,16 +151,6 @@
         // get all id visible data
         var ek=[];
         $('tr.all-order:visible').each(function() { ek.push($(this).data('id')); });
-        var dataj = JSON.stringify(ek);
-
-        // hard code with php
-        <?php
-        // $datap = json_decode(dataj,true);
-        $data = [1,2,10,11];
-        ?>
-
-        // let urlPhp = '{{ route('order-list-export-excel',['qrCode' => $qrCode, 'idData' => serialize($data) ]) }}';
-
         var urlJavascript = '{{ route('order-list-export-excel',['qrCode' => $qrCode]) }}'+'?idData=' + JSON.stringify(ek);
 
         window.location.href = urlJavascript;

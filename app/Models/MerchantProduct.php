@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class MerchantProduct extends Model
 {
+
+    const CREATED_AT = 'create_time';
+    const UPDATED_AT = 'update_time';
+
     /**
      * Get product image
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

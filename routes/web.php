@@ -98,7 +98,10 @@ Route::namespace('Arvi')->group(function(){
                 Route::namespace('TabProducts')->group(function(){
                     
                     //products
-                    Route::get('/product','TabProductListController@productList')->name('product-dashboard');
+                    Route::get('/product','TabProductListController@index')->name('product-dashboard');
+
+                    // edit product
+                    Route::post('/product/edit','TabProductListController@edit')->name('product-edit');
 
                 });
                 
