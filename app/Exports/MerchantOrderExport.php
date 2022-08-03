@@ -12,12 +12,13 @@ class MerchantOrderExport implements FromView
 {
     use Exportable;
 
-    public function __construct($noww,$joinForOrderDetails,$countProduct,$productsOrder)
+    public function __construct($noww,$joinForOrderDetails,$countProduct,$productsOrder,$products)
     {
         $this->noww                 = $noww;
         $this->joinForOrderDetails  = $joinForOrderDetails;
         $this->countProduct         = $countProduct;
         $this->productsOrder        = $productsOrder;
+        $this->products             = $products;
     }
 
     public function view(): View
@@ -27,6 +28,7 @@ class MerchantOrderExport implements FromView
             'joinForOrderDetails'   => $this->joinForOrderDetails,
             'countProduct'          => $this->countProduct,
             'productsOrder'         => $this->productsOrder,
+            'products'              => $this->products,
         ]);
     }
 

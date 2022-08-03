@@ -10,44 +10,31 @@
                     <th>No</th>
                     <th>Delivery Date</th>
                     <th>Delivery Address</th>
-                    <th>Black Coffee</th>
-                    <th>Strong Black Coffee</th>
-                    <th>Oat Milk Coffee</th>
-                    <th>Milk and Manuka Honey Coffee</th>
-                    <th>Hojicha Green Tea</th>
-                    <th>Rooibos Orange Tea</th>
+                    @foreach ($products as $item)
+                        <th>{{$item->name}}</th>
+                    @endforeach
                     <th>Total Item</th>
                 </tr>
             </thead>
             <tbody>
                 @php
                     $i = 1;
-                    $temp_day_deliver = '';
-                    $temp_address = '';
                 @endphp
-                @foreach ($joinForDeliveryDropPoints as $key => $item)
-                    @if (!($temp_day_deliver == $item->day_deliver && $temp_address == $item->address))
-                        <tr>
-                            <td>{{ $i }}</td>
-                            <td>{{ $item->day_deliver }}</td>
-                            <td>{{ $item->address }}</td>
-                            @foreach ($products as $itemP)
-                                {{-- print quantity product --}}
-                                <td class="total-{{ $key }}">
-                                {{ isset( $deliveryDropPointNew[$item->day_deliver][$item->address][$itemP->id]) ? 
-                                $deliveryDropPointNew[$item->day_deliver][$item->address][$itemP->id] : 0 }}
-                                </td>
-                            @endforeach
-                            <td id="result-total-{{ $key }}">
-                                {{array_sum($deliveryDropPointNew[$item->day_deliver][$item->address])}}
-                            </td>
-                        </tr>
-                        @php
-                            $i++;
-                            $temp_day_deliver = $item->day_deliver;
-                            $temp_address = $item->address;
-                        @endphp
-                    @endif
+                @foreach ($displayData as $key => $item)
+                    <tr>
+                        <td>{{ $i }}</td>
+                        <td>{{ $item['day_deliver'] }}</td>
+                        <td>{{ $item['address'] }}</td>
+                        @foreach ($item['dataProduct'] as $itemP)
+                            <td>{{$itemP}}</td>
+                        @endforeach
+                        <td>
+                            {{$item['totalItem']}}
+                        </td>
+                    </tr>
+                    @php
+                        $i++;
+                    @endphp
                 @endforeach
             </tbody>
         </table>

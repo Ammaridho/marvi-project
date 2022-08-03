@@ -1,4 +1,3 @@
-
 <div class="card">
   
   <div class="d-flex justify-content-between flex-grow align-items-center">
@@ -20,12 +19,17 @@
             <div class="me-2 my-1"><input type="text" id="dateRange" name="dateRange" class="form-control form-control-custom" /></div>
             <div class="me-2 my-1">
               <form class="d-flex" onsubmit="return false">
-                <input class="form-control form-control-custom me-2" onkeyup="searchData()" id="input-search" type="search" placeholder="Order-ID/Order-Date/Delivery-Date/Name/Email/Phone/Delivery-Type/Address" aria-label="Search" autocomplete="off" />
+                <input class="form-control form-control-custom me-2" id="input-search" type="search" placeholder="Order-ID/Order-Date/Delivery-Date/Name/Email/Phone/Delivery-Type/Address" aria-label="Search" autocomplete="off" />
                 {{-- <button class="btn btn-sm btn-outline-primary pe-2" id="btnSubmitSearch" type="submit"><i class="menu-icon tf-icons bx bx-search-alt"></i></button> --}}
               </form>
             </div>
             {{-- <button id="btnExport" onclick="fnExcelReport();"> EXPORT </button> --}}
             {{-- <div class=" my-1"><button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="exportTableToExcel('table_order', 'table_order_{{ $noww->format('d-m-Y') }}')"><i class="menu-icon tf-icons bx bx-download"></i> Export</button></div> --}}
+            <div class=" my-1">
+                <button class="btn btn-sm btn-outline-primary me-2" id="reset-filter-day-order">
+                  Reset
+                </button>
+            </div>
             <div class=" my-1">
                 <button class="btn btn-sm btn-outline-primary me-2" id="btnSubmitExport" onclick="exportExcel()">
                   <i class="menu-icon tf-icons bx bx-download"></i> Export
@@ -36,111 +40,38 @@
     </div>
   </div>
   
-  <div class="mx-3 pb-4 table-responsive">
-    <table class="table table-bordered table-sm table-striped report" id="table_order">
-      <thead>
-        <tr class="table-primary">
-          <th>Order ID</th>
-          <th>Order Date</th>
-          <th>Delivery Date</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Delivery Type</th>
-          <th>Address</th>
-          <th>Orders</th>
-        </tr>
-      </thead>
-      <tbody class="table-border-bottom-0" id="list-order">
-
-        <!-- row data -->  
-        @foreach ($joinForOrderDetails as $key => $item)
-
-        <div class="data-order" id="data-order">
-            
-          <tr id="order-list" class="od-{{ date("d-m-Y", strtotime($item->create_time)) }} dd-{{ date("d-m-Y", strtotime($item->day_deliver)) }}  all-order" data-id="{{ $item->id }}">
-            <td>{{ $item->id }}</td>
-            <td>{{ date("d-m-Y h:m:s", strtotime($item->create_time)) }}</td>
-            <td>{{ date("d-m-Y", strtotime($item->day_deliver)) }}</td>
-            <td class="text-nowrap">{{ $item->name }}</td>
-            <td>{{ $item->email }}</td>
-            <td class="text-nowrap">+65 {{ $item->mobile_number }}</td>
-            <td class="text-center">Pickup</td>
-            <td>{{ $item->address }}</td>
-            <td class="text-center">
-              <button class="btn btn-sm btn-primary show-product" target="{{ $key }}">View</button>
-            </td>
-          </tr>
-          <tr><td colspan="9" class="d-none"></td></tr><!-- this needed to make sure table stripped works-->
-          <tr class="more-product" id="blockProduct{{ $key }}" style="display: none;">
-            <td colspan="9">
-              <div class="m-2">
-                <table class="table table-sm table-bordered report">
-                  <tr>
-                    <th>Black Coffee</th>
-                    <th>Strong Black Coffee</th>
-                    <th>Oat Milk Coffee</th>
-                    <th>Milk & Manuka Honey</th>
-                    <th>Coffee Hojicha Green Tea</th>
-                    <th>Rooibos Orange Tea</th>
-                    <th class="table-warning">Total Item</th>
-                  </tr>
-                  <tr>
-                    {{-- set itteration for print quantity product --}}
-                    @for ($i = 1; $i <= $countProduct; $i++) 
-                      <td class="text-end qty{{$i}}">{{!empty($productsOrder[$item->id][$i]) ? (int)$productsOrder[$item->id][$i] : (int)0}}</td>
-                    @endfor
-                    <td class="fw-bold text-end table-warning">{{array_sum($productsOrder[$item->id])}}</td>
-                  </tr>
-                </table>
-              </div>
-            </td>
-          </tr>
-          
-        </div>
-
-        @endforeach
-        <!-- //row data -->  
-        
-      </tbody>
-    </table>
+  <div class="mx-3 pb-4 table-responsive" id="paginate-order">
+    @include('arvi.backend.order-report.page-report-order-child')
   </div>
-
-  {{-- page laravel --}}
-  {{-- {{ $joinForOrderDetails->links() }} --}}
-
-  <!-- paging -->
-  <div class="mx-3 mt-3 text-end">
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="d-none d-sm-none d-md-block">Showing 25 from 100</div>
-        <div class="d-none d-sm-none d-md-block">
-          <nav>
-              <ul class="pagination justify-content-end">
-                  <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item"><a class="page-link" href="#">4</a></li>
-                  <li class="page-item"><a class="page-link" href="#">5</a></li>
-                  <li class="page-item"><a class="page-link p-2" href="#"><i class="bx bx-chevron-left"></i></a></li>
-                  <li class="page-item"><a class="page-link p-2" href="#"><i class="bx bx-chevron-right"></i></a></li>
-              </ul>
-          </nav>
-        </div>
-        <div class="d-block d-sm-block d-md-none">
-          <nav>
-              <ul class="pagination justify-content-end">
-                  <li class="page-item"><a class="page-link p-2" href="#">Previous</a></li>
-                  <li class="page-item"><a class="page-link p-2" href="#">Next</a></li>
-              </ul>
-          </nav>
-        </div>
-      </div>
-  </div>
-  <!-- //paging -->
 
 </div>
 
 <script>
+
+  $(document).ready(function(){
+
+    $(document).on('click', '.page-link', function(event){
+      event.preventDefault(); 
+      var page = $(this).attr('href').split('page=')[1];
+      fetch_data(page);
+    });
+    
+    function fetch_data(page)
+    {
+      var _token = $("input[name=_token]").val();
+      $.ajax({
+        url:"{{ route('order-paginationfetch',['qrCode' => $qrCode, 'action' => 1]) }}",
+        method:"POST",
+        data:{_token:_token, page:page},
+        success:function(data)
+        {
+        $('#paginate-order').html(data);
+        }
+      });
+    }
+    
+  });
+
   // export excel
   function exportExcel(params) {
 
@@ -156,19 +87,44 @@
         window.location.href = urlJavascript;
       }
   }
+
+  // showall data before search and sort
+  var showAll = (function() {
+    var executed = false;
+    return function() {
+      if (!executed) {
+        executed = true;
+        var _token = $("input[name=_token]").val();
+        $.ajax({
+          url:"{{ route('order-paginationfetch',['qrCode' => $qrCode, 'action' => 2]) }}",
+          method:"POST",
+          data:{_token:_token},
+          success:function(data)
+          {
+            $('#paginate-order').html(data);
+          },
+          error:function(){
+            alert('error');
+          }
+        });
+      }
+    };
+  })();
   
   // search order
-  $("#input-search").on("keyup click change", function() {
+  $("#input-search").on("keyup", function() {
+    showAll();
     var value = $(this).val().toLowerCase();
     $("#list-order tr#order-list").filter(function() {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
   });
-  //View product id
-  $('.show-product').click(function() {
-    $('.more-product').not('#blockProduct' + $(this).attr('target')).hide('');
-    $('#blockProduct' + $(this).attr('target')).toggle('');
-  });
+
+  // Reset filter
+  $('#reset-filter-day-order').on('click',function () {
+    $('#order-button').trigger("click");
+  })
+
   //Date range
   var start = moment().subtract(29, 'days');
   var end = moment();
@@ -191,14 +147,10 @@
   });
   cb(start, end);
 
-  // Reset filter
-  $('#reset-filter-day-order').on('click',function () {
-      $('tr.all-order').show();
-  })
-  // when date pick on click
   $('input[name="dateRange"]').on('apply.daterangepicker', function(ev, picker) {
-      getDatesInRange(new Date(picker.startDate.format('YYYY-MM-DD')), 
-      new Date(picker.endDate.format('YYYY-MM-DD')));
+    showAll();
+    getDatesInRange(new Date(picker.startDate.format('YYYY-MM-DD')), 
+    new Date(picker.endDate.format('YYYY-MM-DD')));
   });
   function dateFormat(inputDate, format) {
       //parse the input date
@@ -220,6 +172,7 @@
       return format;
   }
   function getDatesInRange(startDate, endDate) {
+
       // hide all order
       $('tr.all-order').hide();
       const date = new Date(startDate.getTime());

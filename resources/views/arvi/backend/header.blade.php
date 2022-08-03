@@ -1,22 +1,28 @@
-<!DOCTYPE html>
 <html lang="en" data-assets-path="/arvi/backend-assets/">
   <head>
     <meta charset="utf-8" />
     <metaname="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <title>OOBE - Dashboard</title>
     <meta name="description" content="Oobe Bussiness Owners Platform" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/x-icon" href="/arvi/backend-assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
     <link rel="stylesheet" href="/arvi/backend-assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="/arvi/backend-assets/vendor/libs/apex-charts/apex-charts.css" />
     <link rel="stylesheet" href="/arvi/backend-assets/vendor/css/core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="/arvi/backend-assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="/arvi/backend-assets/css/styles.css" />
 
     <link rel="stylesheet" href="/arvi/backend-assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="//arvi/backend-assets/vendor/libs/datepicker/datepicker.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" />
 
     <script src="/arvi/backend-assets/vendor/js/helpers.js"></script>
     <script src="/arvi/backend-assets/js/config.js"></script>
@@ -57,6 +63,38 @@
             <li class="menu-item"> <a href="javascript:void(0)" class="menu-link" id="product-plan-button"> <i class="menu-icon tf-icons bx bx-calendar-check"></i> <div data-i18n="Order">Production Plans</div></a></li>
             <li class="menu-item"> <a href="javascript:void(0)" class="menu-link" id="delivery-drop-point-button"> <i class="menu-icon tf-icons bx bx-package"></i> <div data-i18n="Order">Delivery Drop Point</div></a></li>
             
+            <li class="menu-header small text-uppercase">
+              <span class="menu-header-text">Store</span>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle" id="tab-store-settings">
+                <i class="menu-icon tf-icons bx bx-wrench"></i>
+                <div data-i18n="Account Settings">Store Settings</div>
+              </a>
+              <ul class="menu-sub">
+                {{-- <li class="menu-item">
+                  <a href="page-store-front.php" class="menu-link">
+                    <div data-i18n="Live Chat">Store Front</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="page-fee.php" class="menu-link">
+                    <div data-i18n="Live Chat">Fees</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="#" class="menu-link">
+                    <div data-i18n="Live Chat">Billing & Payouts</div>
+                  </a>
+                </li> --}}
+                <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" id="account-button">
+                    <div data-i18n="Live Chat">Account</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Products</span>
             </li>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Maatwebsite\Excel\Files;
+namespace App\Overrides\Maatwebsite\Files;
 
 use Illuminate\Support\Str;
 

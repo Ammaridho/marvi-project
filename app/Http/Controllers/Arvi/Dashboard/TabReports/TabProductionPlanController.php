@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Arvi\Dashboard\TabReports;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Library\Vendor\autoload;
 use App\Exports\MerchantProductionPlanExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -31,7 +32,7 @@ class TabProductionPlanController extends Controller
             $mId = $data->id;
 
             // to get data product
-            $products = MerchantProduct::where('merchant_id',$mId)->get();
+            $products = MerchantProduct::where('merchant_id',$mId)->orderBy('id','ASC')->get();
 
              // Production Plan
              $joinForProductPlans = MerchantOrder::
@@ -39,6 +40,7 @@ class TabProductionPlanController extends Controller
                         'merchant_order_details.merchant_order_id')
                         ->select('merchant_orders.day_deliver','merchant_orders.id',
                         'merchant_order_details.qty','merchant_order_details.product_id')
+                        ->limit(1000)
                         ->get();
 
             $productPlan = [];
@@ -64,8 +66,8 @@ class TabProductionPlanController extends Controller
                     $dateH[$i] = $now->format('d-M');
                 }
             }
-            return view('arvi.backend.page-report-production-plan',
-                compact('noww','dateA','dateH','productPlan','joinForProductPlans',
+            return view('arvi.backend.production-plan-report.page-report-production-plan',
+                    compact('noww','dateA','dateH','productPlan','joinForProductPlans',
                     'products','qrCode'));
         }
         return view('arvi.frontend.page-not-available');

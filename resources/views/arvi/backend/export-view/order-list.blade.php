@@ -13,12 +13,9 @@
             <th>Customer Phone</th>
             <th>Delivery Type</th>
             <th>Address</th>
-            <th>Black Coffee</th>
-            <th>Strong Black Coffee</th>
-            <th>Oat Milk Coffee</th>
-            <th>Milk and Manuka Honey</th>
-            <th>Coffee	Hojicha Green Tea</th>
-            <th>Rooibos Orange Tea</th>
+            @foreach ($products as $item)
+                <th>{{$item->name}}</th>
+            @endforeach
             <th>Total Item</th>
         </tr>
     </thead>
@@ -34,10 +31,12 @@
                 <td>{{ $item->mobile_number }}</td>
                 <td>Pickup</td>
                 <td class="align-left">{{ $item->address }}</td>
-                @for ($i = 1; $i <= $countProduct; $i++) {{-- set itteration for print quantity product --}}
-                <td class="qty{{$i}}">{{!empty($productsOrder[$item->id][$i]) ? 
-                (int)$productsOrder[$item->id][$i] : (int)0}}</td>
-                @endfor
+                @foreach ($products as $itemP)
+                    <td>
+                        {{!empty($productsOrder[$item->id][$itemP->id]) ? 
+                        (int)$productsOrder[$item->id][$itemP->id] : (int)0}}
+                    </td>
+                @endforeach
                 <td class="qtyTotal">{{array_sum($productsOrder[$item->id])}}</td>
             </tr>
         @endforeach       
@@ -45,40 +44,34 @@
             <tr>
                 <td colspan="7"></td>
                 <td>Total</td>
-                <td id="result1">0</td>
-                <td id="result2">0</td>
-                <td id="result3">0</td>
-                <td id="result4">0</td>
-                <td id="result5">0</td>
-                <td id="result6">0</td>
-                <td id="resultTotal">0</td>
+                @foreach ($products as $itemP)
+                    @php
+                        $qtyP = 0;
+                    @endphp
+                    <td>
+                        @foreach ($joinForOrderDetails as $item)
+                            @php
+                                $qtyP += (!empty($productsOrder[$item->id][$itemP->id]) ? 
+                                (int)$productsOrder[$item->id][$itemP->id] : (int)0);
+                            @endphp
+                        @endforeach
+                        {{$qtyP}}
+                    </td>
+                @endforeach
+                <td>
+                    @php
+                        $qtyP = 0;
+                    @endphp
+                    @foreach ($products as $itemP)
+                        @foreach ($joinForOrderDetails as $item)
+                            @php
+                                $qtyP += (!empty($productsOrder[$item->id][$itemP->id]) ? 
+                                (int)$productsOrder[$item->id][$itemP->id] : (int)0);
+                            @endphp
+                        @endforeach
+                    @endforeach
+                    {{$qtyP}}
+                </td>
             </tr>
     </tbody>
 </table>
-<script src="/arvi/backend-assets/vendor/libs/jquery/jquery.js"></script>
-<script>
-    countAll();
-        // count all product
-        function countAll() {
-            for (let i = 1; i <= 6; i++) {
-                var sum = 0;
-                $(`td.qty${i}`).each(function() {
-                    if(!($(this).is(":hidden"))){
-                    sum += Number($(this).text());
-                    }
-                });
-                $(`#result${i}`).text(sum);
-            }
-            // count all product total
-            var sum = 0;
-            $(`td.qtyTotal`).each(function() {
-                if(!($(this).is(":hidden"))){
-                    sum += Number($(this).text());
-                }
-            });
-            $(`#resultTotal`).text(sum);
-        }
-    $(document).ready(function () {
-        
-    })
-</script>

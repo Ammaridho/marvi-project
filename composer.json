@@ -37,17 +37,9 @@
         }
     },
     "autoload": {
-
-        "exclude-from-classmap": [
-            "vendor/maatwebsite/excel/src/Files/TemporaryFileFactory.php"
-        ],
-
         "psr-4": {
             "App\\": "app/"
         },
-        "files": [
-            "app/overrides/maatwebsite/Files/TemporaryFileFactory.php"
-        ],
         "classmap": [
             "database/seeds",
             "database/factories"

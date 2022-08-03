@@ -10,12 +10,10 @@ class MerchantDeliveryDropPointExport implements FromView
 {
     use Exportable;
 
-    public function __construct($noww,$joinForDeliveryDropPoints,$deliveryDropPointNew,
-        $products)
+    public function __construct($noww,$displayData,$products)
     {
         $this->noww                         = $noww;
-        $this->joinForDeliveryDropPoints    = $joinForDeliveryDropPoints;
-        $this->deliveryDropPointNew         = $deliveryDropPointNew;
+        $this->displayData                  = $displayData;
         $this->products                     = $products;
     }
 
@@ -23,8 +21,7 @@ class MerchantDeliveryDropPointExport implements FromView
     {
         return view('arvi.backend.export-view.delivery-drop-point', [
             'noww'                      => $this->noww,
-            'joinForDeliveryDropPoints' => $this->joinForDeliveryDropPoints,
-            'deliveryDropPointNew'      => $this->deliveryDropPointNew,
+            'displayData'               => $this->displayData,
             'products'                  => $this->products,
         ]);
     }

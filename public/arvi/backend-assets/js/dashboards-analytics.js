@@ -357,7 +357,7 @@
 
   // Profit Report Line Chart
   // --------------------------------------------------------------------
-  const profileReportChartEl = document.querySelector('#profileReportChart'),
+  const profileReportChartEl = document.querySelector('#salesReportChart'),
     profileReportChartConfig = {
       chart: {
         height: 80,
@@ -394,10 +394,12 @@
       },
       series: [
         {
-          data: [110, 270, 145, 245, 205, 285]
+          name: "Visitor",
+          data: [10, 270, 145, 245, 50, 20, 21, 11, 8],
         }
       ],
       xaxis: {
+        categories: ['10.00', '11.00', '12.00', '13.00', '14.00', '15.00', '16.00', '17.00', '18.00'],
         show: false,
         lines: {
           show: false
@@ -423,13 +425,13 @@
   const chartOrderStatistics = document.querySelector('#orderStatisticsChart'),
     orderChartConfig = {
       chart: {
-        height: 165,
-        width: 130,
+        height: 185,
+        width: 150,
         type: 'donut'
       },
-      labels: ['Electronic', 'Sports', 'Decor', 'Fashion'],
+      labels: ['Chicken Menu', 'Duck Menu', 'Drink', 'Promo B1G1', 'a'],
       series: [85, 15, 50, 50],
-      colors: [config.colors.primary, config.colors.secondary, config.colors.info, config.colors.success],
+      colors: [config.colors.primary, config.colors.secondary, config.colors.info, config.colors.success, config.colors.primary],
       stroke: {
         width: 5,
         colors: cardColor
@@ -453,12 +455,11 @@
       plotOptions: {
         pie: {
           donut: {
-            size: '75%',
+            size: '65%',
             labels: {
               show: true,
               value: {
-                fontSize: '1.5rem',
-                fontFamily: 'Public Sans',
+                fontSize: '1.1rem',
                 color: headingColor,
                 offsetY: -15,
                 formatter: function (val) {
@@ -467,13 +468,12 @@
               },
               name: {
                 offsetY: 20,
-                fontFamily: 'Public Sans'
               },
               total: {
                 show: true,
                 fontSize: '0.8125rem',
                 color: axisColor,
-                label: 'Weekly',
+                label: 'Daily',
                 formatter: function (w) {
                   return '38%';
                 }
@@ -494,7 +494,8 @@
     incomeChartConfig = {
       series: [
         {
-          data: [24, 21, 30, 22, 42, 26, 35, 29]
+          name: "Total orders",
+          data: [24, 21, 30, 22, 42, 60, 35, 29]
         }
       ],
       chart: {
@@ -558,7 +559,7 @@
         }
       },
       xaxis: {
-        categories: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        categories: ['', '11 July', '12 July', '13 July', '14 July', '15 July', '16 July', '17 July', '18 July'],
         axisBorder: {
           show: false
         },
@@ -568,7 +569,7 @@
         labels: {
           show: true,
           style: {
-            fontSize: '13px',
+            fontSize: '12px',
             colors: axisColor
           }
         }
@@ -577,8 +578,8 @@
         labels: {
           show: false
         },
-        min: 10,
-        max: 50,
+        min: 5,
+        max: 100,
         tickAmount: 4
       }
     };
@@ -589,9 +590,9 @@
 
   // Expenses Mini Chart - Radial Chart
   // --------------------------------------------------------------------
-  const weeklyExpensesEl = document.querySelector('#expensesOfWeek'),
+  const weeklyExpensesEl = document.querySelector('#test'),
     weeklyExpensesConfig = {
-      series: [65],
+      series: [-22],
       chart: {
         width: 60,
         height: 60,
@@ -617,7 +618,7 @@
             },
             value: {
               formatter: function (val) {
-                return '$' + parseInt(val);
+                return parseInt(val) + '%';
               },
               offsetY: 5,
               color: '#697a8d',
@@ -658,5 +659,219 @@
   if (typeof weeklyExpensesEl !== undefined && weeklyExpensesEl !== null) {
     const weeklyExpenses = new ApexCharts(weeklyExpensesEl, weeklyExpensesConfig);
     weeklyExpenses.render();
-  }
+  };
+
+  const weeklyStore1 = document.querySelector('#salesStore1'),
+    weeklyStoreConfig1 = {
+      series: [-13],
+      chart: {
+        width: 60,
+        height: 60,
+        type: 'radialBar'
+      },
+      plotOptions: {
+        radialBar: {
+          startAngle: 0,
+          endAngle: 360,
+          strokeWidth: '8',
+          hollow: {
+            margin: 2,
+            size: '45%'
+          },
+          track: {
+            strokeWidth: '50%',
+            background: borderColor
+          },
+          dataLabels: {
+            show: true,
+            name: {
+              show: false
+            },
+            value: {
+              formatter: function (val) {
+                return parseInt(val) + '%';
+              },
+              offsetY: 5,
+              color: '#697a8d',
+              fontSize: '13px',
+              show: true
+            }
+          }
+        }
+      },
+      fill: {
+        type: 'solid',
+        colors: config.colors.danger
+      },
+      stroke: {
+        lineCap: 'round'
+      },
+      grid: {
+        padding: {
+          top: -10,
+          bottom: -15,
+          left: -10,
+          right: -10
+        }
+      },
+      states: {
+        hover: {
+          filter: {
+            type: 'none'
+          }
+        },
+        active: {
+          filter: {
+            type: 'none'
+          }
+        }
+      }
+    };
+  if (typeof weeklyStore1 !== undefined && weeklyStore1 !== null) {
+    const weeklyStoresSatu= new ApexCharts(weeklyStore1, weeklyStoreConfig1);
+    weeklyStoresSatu.render();
+  };
+
+  const weeklyStore2 = document.querySelector('#salesStore2'),
+    weeklyStoreConfig2 = {
+      series: [59],
+      chart: {
+        width: 60,
+        height: 60,
+        type: 'radialBar'
+      },
+      plotOptions: {
+        radialBar: {
+          startAngle: 0,
+          endAngle: 360,
+          strokeWidth: '8',
+          hollow: {
+            margin: 2,
+            size: '45%'
+          },
+          track: {
+            strokeWidth: '50%',
+            background: borderColor
+          },
+          dataLabels: {
+            show: true,
+            name: {
+              show: false
+            },
+            value: {
+              formatter: function (val) {
+                return parseInt(val) + '%';
+              },
+              offsetY: 5,
+              color: '#697a8d',
+              fontSize: '13px',
+              show: true
+            }
+          }
+        }
+      },
+      fill: {
+        type: 'solid',
+        colors: config.colors.primary
+      },
+      stroke: {
+        lineCap: 'round'
+      },
+      grid: {
+        padding: {
+          top: -10,
+          bottom: -15,
+          left: -10,
+          right: -10
+        }
+      },
+      states: {
+        hover: {
+          filter: {
+            type: 'none'
+          }
+        },
+        active: {
+          filter: {
+            type: 'none'
+          }
+        }
+      }
+    };
+  if (typeof weeklyStore2 !== undefined && weeklyStore2 !== null) {
+    const weeklyStoresDua= new ApexCharts(weeklyStore2, weeklyStoreConfig2);
+    weeklyStoresDua.render();
+  };
+
+  const weeklyStore3 = document.querySelector('#salesStore3'),
+    weeklyStoreConfig3 = {
+      series: [91],
+      chart: {
+        width: 60,
+        height: 60,
+        type: 'radialBar'
+      },
+      plotOptions: {
+        radialBar: {
+          startAngle: 0,
+          endAngle: 360,
+          strokeWidth: '8',
+          hollow: {
+            margin: 2,
+            size: '45%'
+          },
+          track: {
+            strokeWidth: '50%',
+            background: borderColor
+          },
+          dataLabels: {
+            show: true,
+            name: {
+              show: false
+            },
+            value: {
+              formatter: function (val) {
+                return parseInt(val) + '%';
+              },
+              offsetY: 5,
+              color: '#697a8d',
+              fontSize: '13px',
+              show: true
+            }
+          }
+        }
+      },
+      fill: {
+        type: 'solid',
+        colors: config.colors.primary
+      },
+      stroke: {
+        lineCap: 'round'
+      },
+      grid: {
+        padding: {
+          top: -10,
+          bottom: -15,
+          left: -10,
+          right: -10
+        }
+      },
+      states: {
+        hover: {
+          filter: {
+            type: 'none'
+          }
+        },
+        active: {
+          filter: {
+            type: 'none'
+          }
+        }
+      }
+    };
+  if (typeof weeklyStore3 !== undefined && weeklyStore3 !== null) {
+    const weeklyStoresTiga= new ApexCharts(weeklyStore3, weeklyStoreConfig3);
+    weeklyStoresTiga.render();
+  };
+
 })();

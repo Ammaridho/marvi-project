@@ -64,7 +64,8 @@
 
                 <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email or username" autofocus autocomplete="off" required/>
+                  <input type="email" class="form-control" id="email" name="email" 
+                  placeholder="Enter your email or username" autofocus autocomplete="off" required/>
                   {{-- <div class="mt-2 badge bg-label-danger d-block text-start">Please input correct email.</div> --}}
                   @error('email')
                       <div class="invalid-feedback">
@@ -80,7 +81,9 @@
                     </a>
                   </div>
                   <div class="input-group input-group-merge">
-                    <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" required />
+                    <input type="password" id="password" class="form-control" name="password" 
+                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" 
+                    aria-describedby="password" required />
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                   </div>
                   {{-- <div class="mt-2 badge bg-label-danger d-block text-start">Your password incorrect.</div> --}}

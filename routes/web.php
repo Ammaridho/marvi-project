@@ -77,28 +77,57 @@ Route::namespace('Arvi')->group(function(){
 
                     //orderList
                     Route::get('/order','TabOrderController@orderList')->name('order-dashboard');
-
+                    //pagination
+                    Route::post('/order/paginationFetch','TabOrderController@orderListFetch')
+                    ->name('order-paginationfetch');
                     //export orderlist to excel
-                    Route::get('/order/export', 'TabOrderController@OrderListExportExcel')->name('order-list-export-excel');
+                    Route::get('/order/export','TabOrderController@OrderListExportExcel')
+                    ->name('order-list-export-excel');
                     
                     //production plan
-                    Route::get('/productionPlan','TabProductionPlanController@productionPlanList')->name('production-plan-dashboard');
-                    
+                    Route::get('/productionPlan','TabProductionPlanController@productionPlanList')
+                    ->name('production-plan-dashboard');
                     //export orderlist to excel
-                    Route::get('/productionPlan/export', 'TabProductionPlanController@ProductionPlanExportExcel')->name('production-plan-export-excel');
+                    Route::get('/productionPlan/export','TabProductionPlanController@ProductionPlanExportExcel')
+                    ->name('production-plan-export-excel');
                     
                     //delivery order point
-                    Route::get('/deliveryOrderPoint','TabDeliveryDropPointController@deliveryDropPointList')->name('delivery-order-dashboard');
-                    
+                    Route::get('/deliveryOrderPoint','TabDeliveryDropPointController@deliveryDropPointList')
+                    ->name('delivery-order-dashboard');
+                    //pagination
+                    Route::post('/deliveryOrderPoint/paginationFetch','TabDeliveryDropPointController@deliveryDropPointListFetch')
+                    ->name('deliveryOrderPoint-paginationfetch');
                     //export deliverydroppoint to excel
-                    Route::get('/deliveryOrderPoint/export', 'TabDeliveryDropPointController@deliveryDropPointListExportExcel')->name('delivery-drop-point-export-excel');
+                    Route::get('/deliveryOrderPoint/export', 'TabDeliveryDropPointController@deliveryDropPointListExportExcel')
+                    ->name('delivery-drop-point-export-excel');
 
+                });
+
+                Route::namespace('TabStoreSettings')->group(function (){
+
+                    // account
+                    Route::get('/account','TabAccountController@index')->name('account-list');
+                    // add account
+                    Route::get('/account/form','TabAccountController@form')->name('account-form');
+                    // store
+                    Route::post('/account/form','TabAccountController@store')->name('account-store');
+                    // form update
+                    Route::get('/account/formUpdate','TabAccountController@formUpdate')->name('account-from-update');
+                    // update
+                    Route::put('/account/formUpdate','TabAccountController@update')->name('account-update');
+                    // delete
+                    Route::delete('/account/form','TabAccountController@delete')->name('account-delete');
+                    
                 });
 
                 Route::namespace('TabProducts')->group(function(){
                     
                     //products
-                    Route::get('/product','TabProductListController@index')->name('product-dashboard');
+                    Route::get('/product','TabProductListController@index')
+                    ->name('product-dashboard');
+                    //products fetch
+                    Route::post('/product/paginationFetch','TabProductListController@indexFetch')
+                    ->name('product-dashboard-paginationfetch');
 
                     // edit product
                     Route::post('/product/edit','TabProductListController@edit')->name('product-edit');

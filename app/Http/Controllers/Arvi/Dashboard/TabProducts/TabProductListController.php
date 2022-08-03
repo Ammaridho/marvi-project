@@ -21,8 +21,29 @@ class TabProductListController extends Controller
             // get id merchant
             $mId = $data->id;
             // to get data product
-            $products = MerchantProduct::where('merchant_id',$mId)->get();
-            return view('arvi.backend.page-product-list',compact('products','qrCode'));
+            $products = MerchantProduct::where('merchant_id',$mId)->orderBy('id','ASC')->paginate(5);
+            $countProduct = MerchantProduct::count();
+            return view('arvi.backend.product-list.page-product-list-parent',
+            compact('products','qrCode','countProduct'));
+        }
+        return view('arvi.frontend.page-not-available');
+    }
+
+    public function indexFetch(Request $request)
+    {
+        // get code merchant
+        $qrCode = $request->qrCode;
+        //get data merchant
+        $data = Merchant::getByCode($qrCode);
+        // check if merchant exist
+        if ($data) {
+            // get id merchant
+            $mId = $data->id;
+            // to get data product
+            $products = MerchantProduct::where('merchant_id',$mId)->orderBy('id','ASC')->paginate(5);
+            $countProduct = MerchantProduct::count();
+            return view('arvi.backend.product-list.page-product-list-child',
+            compact('products','qrCode','countProduct'));
         }
         return view('arvi.frontend.page-not-available');
     }

@@ -35,11 +35,11 @@
         <small class="fw-semibold">
 
             @if($percentase > 0)
-                <div class="text-success"><i class="bx bx-up-arrow-alt"></i> {{ $percentase }}%</div>
+                <div class="text-success"><i class="bx bx-up-arrow-alt"></i> {{ round($percentase, 2) }}%</div>
             @elseif($percentase = 0)
-                <div class="text-warning"><i class="bx bx-mid-arrow-alt"></i> {{ $percentase }}%</div>
+                <div class="text-warning"><i class="bx bx-mid-arrow-alt"></i> {{ round($percentase, 2) }}%</div>
             @else
-                <div class="text-danger"><i class="bx bx-down-arrow-alt"></i> {{ $percentase }}%</div>
+                <div class="text-danger"><i class="bx bx-down-arrow-alt"></i> {{ round($percentase, 2) }}%</div>
             @endif
 
             <div>from yesterday</div>
@@ -85,9 +85,7 @@
 <script>
     $(document).ready(function () {
         $('#view-order').on('click',function () {
-            $.get("{{ secure_url(route('order-dashboard',['qrCode' => $qrCode])) }}",function (data) {
-                $('#contentDashboard').html(data);
-            })
+            $('#order-button').trigger("click");
         })
     })
 </script>
