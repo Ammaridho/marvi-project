@@ -37,9 +37,10 @@ class TabDeliveryDropPointController extends Controller
                 'merchant_order_details.merchant_order_id')
                 ->orderBy('merchant_orders.day_deliver','desc')
                 ->orderBy('merchant_orders.address','asc')
-                ->select('merchant_orders.day_deliver','merchant_orders.id', 'merchant_defined_deliveries.address',
+                ->select('merchant_orders.day_deliver','merchant_orders.id','merchant_defined_deliveries.address',
                 'merchant_order_details.qty','merchant_order_details.product_id')
-                ->limit(1000)
+                // ->offset(0)
+                // ->limit(5)
                 ->get();
 
             // mapping product to quantity
@@ -50,6 +51,7 @@ class TabDeliveryDropPointController extends Controller
                 [$value->id][$value->product_id] 
                 = $value->qty;
             }
+            //$deliveryDropPoint[day_deliver][address][id][product_id] = $qty;
 
             // remapping data base on date and address
             $aa = [];
@@ -79,6 +81,7 @@ class TabDeliveryDropPointController extends Controller
                 $temp_address   = $item->address;
                 $temp_product_id = $item->product_id;
             }   
+            // $deliveryDropPointNew[day_deliver][address][product_id] = $new_qty;
             
 
             //reformat data to display
@@ -88,15 +91,20 @@ class TabDeliveryDropPointController extends Controller
             $idExist = [];
             $data = [];
             
-
+            //mapping to be final data
             foreach ($joinForDeliveryDropPoints as $key => $item){
 
+                // if have same day deliver and same address
                 if (!($temp_day_deliver == $item->day_deliver && $temp_address == $item->address)){
                     $dataProduct = [];
+
+                    // meppping all product
                     foreach ($products as $itemP){
                         $dataProduct[$itemP->id] = isset( $deliveryDropPointNew[$item->day_deliver][$item->address][$itemP->id]) ? 
                         $deliveryDropPointNew[$item->day_deliver][$item->address][$itemP->id] : 0;
                     }
+
+                    //bundle data
                     $data[$i] = [
                         'day_deliver'   => $item->day_deliver,
                         'address'       => $item->address,
@@ -112,8 +120,9 @@ class TabDeliveryDropPointController extends Controller
 
             $countDeliveryDropPoint = count($data);
 
-            $dataPaginate = $this->paginate($data);
-            $test = $dataPaginate;
+            $dataPaginate = $this->paginate($data,3);
+            
+            $test = '';
 
             return view('arvi.backend.delivery-drop-point-report.page-report-delivery-drop-point-parent',
                     compact('joinForDeliveryDropPoints','deliveryDropPointNew',
@@ -130,6 +139,10 @@ class TabDeliveryDropPointController extends Controller
         if ($data) {
             $mId = $data->id;
 
+            $page = $request->page;
+            
+            $test = $page;
+           
             // to get data order, bio customer and pickup address
             $joinForDeliveryDropPoints = MerchantOrder::join('merchant_defined_deliveries',
                 'merchant_orders.defined_delivery_id','=','merchant_defined_deliveries.id')
@@ -139,8 +152,7 @@ class TabDeliveryDropPointController extends Controller
                 ->orderBy('merchant_orders.address','asc')
                 ->select('merchant_orders.day_deliver','merchant_orders.id', 'merchant_defined_deliveries.address',
                 'merchant_order_details.qty','merchant_order_details.product_id')
-                ->limit(1000)
-                ->get();
+                ->limit(1000)->get();
 
             // mapping product to quantity
             $products = MerchantProduct::where('merchant_id',$mId)->orderBy('id','ASC')->get();
@@ -209,9 +221,8 @@ class TabDeliveryDropPointController extends Controller
 
             $countDeliveryDropPoint = count($data);
 
-            $test = $request;
             if ($request->action == 1) { //pagination
-                $dataPaginate = $this->paginate($data,5,$request->page);
+                $dataPaginate = $this->paginate($data,3,$request->page);
                 return view('arvi.backend.delivery-drop-point-report.page-report-delivery-drop-point-child',
                         compact('products','qrCode','test','dataPaginate','data','countDeliveryDropPoint'));
             }else{
@@ -224,7 +235,7 @@ class TabDeliveryDropPointController extends Controller
         return view('arvi.frontend.page-not-available');
     }
 
-    public function paginate($items, $perPage = 5, $page = null, $options = [])
+    public function paginate($items, $perPage = 3, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);

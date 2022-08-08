@@ -20,9 +20,10 @@ class TabAccountController extends Controller
         $qrCode = $request->qrCode;
         $data = Merchant::getByCode($qrCode);
         if ($data) {
+            $merchants = Merchant::pluck('name');;
             $user = User::orderBy('id','desc')->get();
             return view($this->view . 'page-account',
-                    compact('qrCode','user'));
+                    compact('qrCode','user','merchants'));
         }
         return view('arvi.frontend.page-not-available');
     }
@@ -48,7 +49,7 @@ class TabAccountController extends Controller
             $validatedData = $request->validate([
                 'name'      => 'required',
                 'email'     => 'required|email',
-                'password'  => 'required|confirmed|min:6',
+                'password'  => 'required|confirmed',
                 'role'      => 'required',
                 'store'     => 'required',
             ]);
@@ -86,7 +87,7 @@ class TabAccountController extends Controller
             $validatedData = $request->validate([
                 'name'      => 'required',
                 'email'     => 'required|email',
-                'password'  => 'required|confirmed|min:6',
+                'password'  => 'required|confirmed',
                 'role'      => 'required',
                 'store'     => 'required',
             ]);

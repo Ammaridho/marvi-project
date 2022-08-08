@@ -148,7 +148,7 @@
             },
             error: function (data) {
                 console.log(data);
-                alert('input the data correctly!');
+                alert('Create Fail, Make sure everything is filled in, your email is unique and the password is the same as the confirmation!');
             }
         })
     });

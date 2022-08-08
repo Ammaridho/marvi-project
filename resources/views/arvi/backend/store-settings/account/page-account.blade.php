@@ -30,7 +30,7 @@
                         <thead>
                             <tr>
                                 <th class="text-nowrap">Username</th>
-                                <th class="">Id Store</th>
+                                <th class="">Store</th>
                                 <th class="">Role</th>
                                 <th></th>
                             </tr>
@@ -38,33 +38,42 @@
                         <tbody id="tbody-account-list">
                             <!-- user -->
                             @foreach ($user as $item)
-                            <tr id="account-list">
-                                <td class="fw-bold">{{$item->email}}</td>
-                                <td>
-                                    @php
-                                    $a = '';
-                                    foreach(json_decode($item->store_id) as $key => $im){
-                                        if ($key!=0) {
-                                            $a .= ',';
-                                        }
-                                        $a .= $im;
-                                    }    
-                                    @endphp 
-                                    {{$a}}
-                                </td>
-                                <td>{{$item->role}}</td>
-                                <td class="text-nowrap">
-                                    <div class="d-flex justify-content-end">
-                                        <div class="mx-2"><a href="javascript:void(0)" data-data="{{ $item }}" 
-                                            class="btn btn-sm btn-primary edit-account"><i class="fas fa-pen"></i></a>
+                                <tr id="account-list">
+                                    <td class="fw-bold">{{$item->email}}</td>
+                                    <td>
+                                        @if ($item->store_id != null)
+                                            @php
+                                            $a = '';
+                                            foreach(json_decode($item->store_id) as $key => $im){
+                                                if ($key!=0) {
+                                                    $a .= ', ';
+                                                }
+                                                $a .= $merchants[$im-1];
+                                            }    
+                                            @endphp 
+                                            {{$a}}
+                                        @else
+                                            please set store!
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($item->role != null)
+                                        {{$item->role}}
+                                        @else
+                                            please set role!
+                                        @endif
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <div class="d-flex justify-content-end">
+                                            <div class="mx-2"><a href="javascript:void(0)" data-data="{{ $item }}" 
+                                                class="btn btn-sm btn-primary edit-account"><i class="fas fa-pen"></i></a>
+                                            </div>
+                                            <div class=""><a href="javascript:void(0)" data-id="{{ $item->id }}" 
+                                                class="btn btn-sm btn-primary delete-account"><i class='bx bx-trash-alt' ></i></a>
+                                            </div>
                                         </div>
-                                        <div class=""><a href="javascript:void(0)" data-id="{{ $item->id }}" 
-                                            class="btn btn-sm btn-primary delete-account"><i class='bx bx-trash-alt' ></i></a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            
+                                    </td>
+                                </tr>
                             @endforeach
                             <!-- //user -->-
                         </tbody>

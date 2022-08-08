@@ -1,4 +1,4 @@
-{{-- {{dd($data)}} --}}
+{{-- {{dd($test)}} --}}
 <div class="card">
   <div class="d-flex justify-content-between flex-grow align-items-center">
     <div><h5 class="card-header">Delivery Drop Point</h5></div>
@@ -7,13 +7,6 @@
           <div class="d-flex justify-content-end flex-sm-row flex-column">
             <div class="me-2 my-1"><input type="text" id="dateRange" name="dateRange" 
                 class="form-control form-control-custom" /></div>
-            {{-- <div class="me-2 my-1">
-              <form class="d-flex" onsubmit="return false">
-                <input class="form-control form-control-custom me-2" 
-                id="input-search" type="search" placeholder="No/Delivery-Date/Delivery-Address/Total-Item" 
-                aria-label="Search" autocomplete="off" />
-              </form>
-            </div> --}}
             <div class=" my-1">
               <button class="btn btn-sm btn-outline-primary me-2" id="reset-filter-day-order">
                 Reset
@@ -99,15 +92,6 @@
       }
     };
   })();
-
-  // search delivery drop point
-  $("#input-search").on("keyup click change", function() {
-    showAll();
-    var value = $(this).val().toLowerCase();
-    $("#list-delivery-drop-point-list tr#list-delivery-drop-point-list").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
 
   // Reset filter
   $('#reset-filter-day-order').on('click',function () {

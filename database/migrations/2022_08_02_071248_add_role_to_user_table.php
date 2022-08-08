@@ -15,7 +15,7 @@ class AddRoleToUserTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->enum('role',['admin','viewer'])->nullable();
-            $table->json('store_id')->nullable();
+            $table->text('store_id')->nullable();
         });
     }
 
