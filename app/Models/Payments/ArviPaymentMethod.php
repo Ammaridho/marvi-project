@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Cache;
  */
 class ArviPaymentMethod extends Model
 {
-    const CC = 1;
-    const DEBIT = 2;
-    const TRANSFER = 3;
+    const CC = 13;
+    const DEBIT = 14;
+    const TRANSFER = 15;
     const GOPAY = 21;
     const OVO = 22;
 
@@ -33,13 +33,13 @@ class ArviPaymentMethod extends Model
     public static function resolveName($id) {
         $name = "UNKNOWN";
         switch ($id) {
-            case 1:
+            case 13:
                 $name = "Credit Card";
                 break;
-            case 2:
+            case 14:
                 $name = "Debit Card";
                 break;
-            case 3:
+            case 15:
                 $name = "Transfer";
                 break;
             case 21:

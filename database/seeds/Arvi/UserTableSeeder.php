@@ -11,7 +11,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->delete();
+        DB::table('users')->where('email','admin@gmail.com')->delete();
 
         $data = [
             // product 1
@@ -19,6 +19,8 @@ class UserTableSeeder extends Seeder
                 'name'      => 'admin',
                 'email'     => 'admin@gmail.com',
                 'password'  =>  bcrypt('admin'),
+                'role'      => 'superadmin',
+                'api_token' => 'asdadfasdfasdf'
             ],
             
             

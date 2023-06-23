@@ -26,15 +26,15 @@ class ArviDeliveriesTableSeeder extends Seeder
                 'external'    => 1,
                 'create_time' => Carbon::create('2022', '10', '01'),
                 'cost_delivery' => 0,
-                'currency'      => '$',
+                'currency'      => 'IDR',
             ],
             [
                 'name'        => 'Delivery',
                 'code'        => 'dlv'. Str::random(5),
                 'external'    => 1,
                 'create_time' => Carbon::create('2022', '10', '01'),
-                'cost_delivery' => 1,
-                'currency'      => '$',
+                'cost_delivery' => 5000,
+                'currency'      => 'IDR',
             ],
             // [
             //     'name'        => 'Paksel',

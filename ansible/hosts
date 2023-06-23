@@ -1,5 +1,5 @@
 [dev]
-34.143.139.148 ansible_user=appjenkins
+13.229.97.45 ansible_user=appjenkins
 
 [prod]
-34.143.139.148 ansible_user=appjenkins
+13.229.97.45 ansible_user=appjenkins

@@ -17,8 +17,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            $qrCode = Session::get('qrCode'); //get code merchant
-            return route('login', ['qrCode' => $qrCode]);
+            return '/dashboard';
         }
     }
 }

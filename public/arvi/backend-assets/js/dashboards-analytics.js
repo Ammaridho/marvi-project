@@ -425,12 +425,12 @@
   const chartOrderStatistics = document.querySelector('#orderStatisticsChart'),
     orderChartConfig = {
       chart: {
-        height: 185,
-        width: 150,
+        height: 205,
+        width: 170,
         type: 'donut'
       },
-      labels: ['Chicken Menu', 'Duck Menu', 'Drink', 'Promo B1G1', 'a'],
-      series: [85, 15, 50, 50],
+      labels: ['Ayam Taliwang', 'Ayam Bakar', 'Teh Botol', 'Promo B1G1'],
+      series: [10, 20, 30, 40],
       colors: [config.colors.primary, config.colors.secondary, config.colors.info, config.colors.success, config.colors.primary],
       stroke: {
         width: 5,
@@ -473,7 +473,7 @@
                 show: true,
                 fontSize: '0.8125rem',
                 color: axisColor,
-                label: 'Daily',
+                //label: 'Daily',
                 formatter: function (w) {
                   return '38%';
                 }

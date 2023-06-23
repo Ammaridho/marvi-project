@@ -12,6 +12,7 @@ use App\Models\Merchant;
 use App\Models\MerchantProduct;
 use App\Models\MerchantOrder;
 use App\Models\MerchantOrderDetail;
+use App\Models\Company;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\AbstractPaginator;
@@ -24,8 +25,8 @@ class TabOrderController extends Controller
     public function orderList(Request $request)
     {
         // get code merchant
-        $qrCode = $request->qrCode;
-        $data = Merchant::getByCode($qrCode);
+        $companyCode = $request->companyCode;
+        $data = Company::getByCode($companyCode);
         
         // check if merchant exist
         if ($data) {
@@ -36,7 +37,8 @@ class TabOrderController extends Controller
             $joinForOrderDetails = MerchantOrder::orderBy('create_time', 'desc')->paginate(10);
 
             // to get quantity all product on order 
-            $dataOrderDetails = MerchantOrderDetail::where('merchant_id',$mId)->orderBy('create_time', 'desc')->limit(1000)->get();
+            $dataOrderDetails = MerchantOrderDetail::where('merchant_id',$mId)->
+                orderBy('create_time', 'desc')->limit(1000)->get();
             $productsOrder = [];
             foreach ($dataOrderDetails as $valueDod) {
                 //quantity per order    
@@ -51,7 +53,7 @@ class TabOrderController extends Controller
 
             return view('arvi.backend.order-report.page-report-order-parent',
                 compact('noww','joinForOrderDetails','productsOrder',
-                'countProduct','products','qrCode','countOrder'));
+                'countProduct','products','companyCode','countOrder'));
         }
         return view('arvi.frontend.page-not-available');
     }
@@ -60,8 +62,8 @@ class TabOrderController extends Controller
     public function orderListFetch(Request $request)
     {
         // get code merchant
-        $qrCode = $request->qrCode;
-        $data = Merchant::getByCode($qrCode);
+        $companyCode = $request->companyCode;
+        $data = Company::getByCode($companyCode);
         
         // check if merchant exist
         if ($data) {
@@ -99,7 +101,7 @@ class TabOrderController extends Controller
 
             return view('arvi.backend.order-report.page-report-order-child',
                     compact('noww','joinForOrderDetails','productsOrder',
-                    'countProduct','products','qrCode','countOrder'))->render();
+                    'countProduct','products','companyCode','countOrder'))->render();
         }
         // return view('arvi.frontend.page-not-available');
     }
@@ -107,8 +109,8 @@ class TabOrderController extends Controller
     // export order to excel
     public function orderListExportExcel(Request $request)
     {
-        $qrCode = $request->qrCode;
-        $data = Merchant::getByCode($qrCode);
+        $companyCode = $request->companyCode;
+        $data = Company::getByCode($companyCode);
         if ($data) {
             $mId = $data->id;
             $noww = Carbon::now();

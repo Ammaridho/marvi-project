@@ -34,4 +34,14 @@ return [
         'key' => env('STRIPE_KEY'),
     ],
 
+    'lodi' => [
+        'key' => env('LODI_KEY'),
+        'ars_bearer_token' => env('ARS_LODI_BEARER_TOKEN'),
+    ],
+
+    'xendit' => [
+        'token' => env('XENDIT_TOKEN'),
+        'callback_token' => env('XENDIT_CALLBACK_TOKEN'),
+    ]
+
 ];

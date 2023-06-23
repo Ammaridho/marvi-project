@@ -15,72 +15,72 @@ class ProductAttributesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('product_attributes')->delete();
+        DB::table('brand_product_attributes')->delete();
 
         $faker = Faker::create('id_ID');
 
         $data = [
             // product 1
             [
-                'merchant_product_id'           => 1,
+                'brand_product_id'              => 1,
                 'create_time'                   => Carbon::today()->subDays(rand(0, 365)),
-                'name'                          => 'sambal Matah',
-                'fee'                           => 0.5,
-                'currency'                      => '$',
+                'name'                          => 'gula',
+                'retail_price'                  => 2000,
+                'currency'                      => 'IDR',
                 'active'                        => 1,
             ],
             [
-                'merchant_product_id'           => 1,
+                'brand_product_id'              => 1,
                 'create_time'                   => Carbon::today()->subDays(rand(0, 365)),
-                'name'                          => 'sambal Korek',
-                'fee'                           => 0.8,
-                'currency'                      => '$',
+                'name'                          => 'creamer',
+                'retail_price'                  => 3000,
+                'currency'                      => 'IDR',
                 'active'                        => 1,
             ],
             [
-                'merchant_product_id'           => 1,
+                'brand_product_id'              => 1,
                 'create_time'                   => Carbon::today()->subDays(rand(0, 365)),
-                'name'                          => 'sambal Ijo',
-                'fee'                           => 0.2,
-                'currency'                      => '$',
+                'name'                          => 'susu',
+                'retail_price'                  => 1000,
+                'currency'                      => 'IDR',
                 'active'                        => 1,
             ],
             [
-                'merchant_product_id'           => 2,
+                'brand_product_id'              => 2,
                 'create_time'                   => Carbon::today()->subDays(rand(0, 365)),
-                'name'                          => 'Mayonais',
-                'fee'                           => 0.2,
-                'currency'                      => '$',
+                'name'                          => 'gula',
+                'retail_price'                  => 1000,
+                'currency'                      => 'IDR',
                 'active'                        => 1,
             ],
             [
-                'merchant_product_id'           => 2,
+                'brand_product_id'              => 2,
                 'create_time'                   => Carbon::today()->subDays(rand(0, 365)),
-                'name'                          => 'cheese sauce',
-                'fee'                           => 0.5,
-                'currency'                      => '$',
+                'name'                          => 'creamer',
+                'retail_price'                  => 2000,
+                'currency'                      => 'IDR',
                 'active'                        => 1,
             ],
             [
-                'merchant_product_id'           => 3,
+                'brand_product_id'              => 3,
                 'create_time'                   => Carbon::today()->subDays(rand(0, 365)),
-                'name'                          => 'Ice Cream Vanila',
-                'fee'                           => 0.7,
-                'currency'                      => '$',
+                'name'                          => 'gula',
+                'retail_price'                  => 3000,
+                'currency'                      => 'IDR',
                 'active'                        => 1,
             ],
             [
-                'merchant_product_id'           => 3,
+                'brand_product_id'              => 3,
                 'create_time'                   => Carbon::today()->subDays(rand(0, 365)),
                 'name'                          => 'chocolate syrup',
-                'fee'                           => 0.6,
-                'currency'                      => '$',
+                'retail_price'                  => 2000,
+                'currency'                      => 'IDR',
                 'active'                        => 1,
             ]
             
         ];
 
-        DB::table('product_attributes')->insert($data);
+        DB::table('brand_product_attributes')->insert($data);
     }
     
 }

@@ -16,9 +16,14 @@ For speedier frontend compilation you can run:
 
     $ npm run dev
 
+For storage link in public folder:
 
-make sure relation all relation table:
-exmp. merchant.id=1  product.merchant_id=1
+    $ php artisan storage:link
+
+create keys passport:
+
+    $ php artisan passport:keys --force
+    $ php artisan passport:client --personal --no-interaction
 
 ---
 Lodi@2022

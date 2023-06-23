@@ -4,12 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Merchant defined delivery
  */
 class MerchantDefinedDelivery extends Model
 {
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
+
+    /**
+     * The name of the "deleted at" column.
+     *
+     * @var string|null
+     */
+    const DELETED_AT = 'delete_time';
+    
     public function merchant()
     {
         return $this->belongsTo(Merchant::class);

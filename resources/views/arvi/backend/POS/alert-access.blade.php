@@ -1,0 +1,1 @@
+"Just 'admin' can access this, and if admin have one store only"

@@ -19,6 +19,9 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        '/xendit/callback/ew',  
+        '/xendit/callback/qr',
+        '/xendit/callback/va',
+        '/xendit/callback/ro',
     ];
 }

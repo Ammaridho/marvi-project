@@ -26,7 +26,7 @@
     {
       var _token = $("input[name=_token]").val();
       $.ajax({
-        url:"{{ route('product-dashboard-paginationfetch',['qrCode' => $qrCode, 'action' => 1]) }}",
+        url:"{{ route('product-dashboard-paginationfetch',['companyCode' => $companyCode, 'action' => 1]) }}",
         method:"POST",
         data:{_token:_token, page:page},
         success:function(data)

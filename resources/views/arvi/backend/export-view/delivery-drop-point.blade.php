@@ -20,7 +20,7 @@
                 @php
                     $i = 1;
                 @endphp
-                @foreach ($displayData as $key => $item)
+                @foreach ($data as $key => $item)
                     <tr>
                         <td>{{ $i }}</td>
                         <td>{{ $item['day_deliver'] }}</td>

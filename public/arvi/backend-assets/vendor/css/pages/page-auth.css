@@ -19,6 +19,10 @@
 .authentication-wrapper.authentication-cover .authentication-inner {
   height: 100vh;
 }
+.authentication-wrapper.authentication-basic .authentication-inner.login {
+  max-width: 640px;
+  position: relative;
+}
 .authentication-wrapper.authentication-basic .authentication-inner {
   max-width: 400px;
   position: relative;
@@ -44,7 +48,7 @@
   z-index: 1;
 }
 .authentication-wrapper.authentication-basic .authentication-inner .card .app-brand {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 .authentication-wrapper .auth-input-wrapper .auth-input {
   max-width: 50px;

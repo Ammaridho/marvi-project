@@ -20,7 +20,6 @@
             <div class="me-2 my-1">
               <form class="d-flex" onsubmit="return false">
                 <input class="form-control form-control-custom me-2" id="input-search" type="search" placeholder="Order-ID/Order-Date/Delivery-Date/Name/Email/Phone/Delivery-Type/Address" aria-label="Search" autocomplete="off" />
-                {{-- <button class="btn btn-sm btn-outline-primary pe-2" id="btnSubmitSearch" type="submit"><i class="menu-icon tf-icons bx bx-search-alt"></i></button> --}}
               </form>
             </div>
             {{-- <button id="btnExport" onclick="fnExcelReport();"> EXPORT </button> --}}
@@ -60,7 +59,7 @@
     {
       var _token = $("input[name=_token]").val();
       $.ajax({
-        url:"{{ route('order-paginationfetch',['qrCode' => $qrCode, 'action' => 1]) }}",
+        url:"{{ route('order-paginationfetch',['companyCode' => $companyCode, 'action' => 1]) }}",
         method:"POST",
         data:{_token:_token, page:page},
         success:function(data)
@@ -82,7 +81,7 @@
         // get all id visible data
         var ek=[];
         $('tr.all-order:visible').each(function() { ek.push($(this).data('id')); });
-        var urlJavascript = '{{ route('order-list-export-excel',['qrCode' => $qrCode]) }}'+'?idData=' + JSON.stringify(ek);
+        var urlJavascript = '{{ route('order-list-export-excel',['companyCode' => $companyCode]) }}'+'?idData=' + JSON.stringify(ek);
 
         window.location.href = urlJavascript;
       }
@@ -96,7 +95,7 @@
         executed = true;
         var _token = $("input[name=_token]").val();
         $.ajax({
-          url:"{{ route('order-paginationfetch',['qrCode' => $qrCode, 'action' => 2]) }}",
+          url:"{{ route('order-paginationfetch',['companyCode' => $companyCode, 'action' => 2]) }}",
           method:"POST",
           data:{_token:_token},
           success:function(data)
@@ -104,7 +103,7 @@
             $('#paginate-order').html(data);
           },
           error:function(){
-            alert('error');
+            console.log(data);
           }
         });
       }
@@ -180,11 +179,9 @@
 
       switch ($('#typeDate').find(":selected").text()) {
           case 'Order Date':
-              // alert('Order Date');
               var angkerDate = 'od';
               break;
           case 'Deliver Date':
-              // alert('Deliver Date');
               var angkerDate = 'dd';
               break;
       }

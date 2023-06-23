@@ -89,5 +89,20 @@ class ArviPaymentProviderSeeder extends Seeder
                 ]
             );
         }
+
+        $ex =
+            \App\Models\Payments\ArviPaymentProvider::where('id',\App\Models\Payments\ArviPaymentProvider::CASHIER)
+            ->first();
+        if (!$ex) {
+            \App\Models\Payments\ArviPaymentProvider::create(
+                [
+                    'id'          => \App\Models\Payments\ArviPaymentProvider::CASHIER,
+                    'name'        => 'Cashier',
+                    'create_time' => \Carbon\Carbon::now(),
+                    'update_time' => \Carbon\Carbon::now(),
+                    'active'      => 1,
+                ]
+            );
+        }
     }
 }

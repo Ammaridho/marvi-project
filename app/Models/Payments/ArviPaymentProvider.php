@@ -14,6 +14,7 @@ class ArviPaymentProvider extends Model
     const DOKU = 2;
     const MIDTRANS = 3;
     const XENDIT = 4;
+    const CASHIER = 5;
 
     /* -- End of preset Payment Provider -- */
 
@@ -60,6 +61,9 @@ class ArviPaymentProvider extends Model
                 break;
             case 4:
                 $name = "Xendit";
+                break;
+            case 5:
+                $name = "Cashier";
                 break;
 
         }

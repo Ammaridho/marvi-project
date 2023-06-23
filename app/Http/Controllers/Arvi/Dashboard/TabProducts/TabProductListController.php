@@ -7,15 +7,16 @@ use Illuminate\Http\Request;
 
 use App\Models\Merchant;
 use App\Models\MerchantProduct;
+use App\Models\Company;
 
 class TabProductListController extends Controller
 {
     public function index(Request $request)
     {
         // get code merchant
-        $qrCode = $request->qrCode;
+        $companyCode = $request->companyCode;
         //get data merchant
-        $data = Merchant::getByCode($qrCode);
+        $data = Company::getByCode($companyCode);
         // check if merchant exist
         if ($data) {
             // get id merchant
@@ -24,17 +25,17 @@ class TabProductListController extends Controller
             $products = MerchantProduct::where('merchant_id',$mId)->orderBy('id','ASC')->paginate(5);
             $countProduct = MerchantProduct::count();
             return view('arvi.backend.product-list.page-product-list-parent',
-            compact('products','qrCode','countProduct'));
+            compact('products','companyCode','countProduct'));
         }
-        return view('arvi.frontend.page-not-available');
+        return view('arvi.page-not-available');
     }
 
     public function indexFetch(Request $request)
     {
         // get code merchant
-        $qrCode = $request->qrCode;
+        $companyCode = $request->companyCode;
         //get data merchant
-        $data = Merchant::getByCode($qrCode);
+        $data = Company::getByCode($companyCode);
         // check if merchant exist
         if ($data) {
             // get id merchant
@@ -43,9 +44,9 @@ class TabProductListController extends Controller
             $products = MerchantProduct::where('merchant_id',$mId)->orderBy('id','ASC')->paginate(5);
             $countProduct = MerchantProduct::count();
             return view('arvi.backend.product-list.page-product-list-child',
-            compact('products','qrCode','countProduct'));
+            compact('products','companyCode','countProduct'));
         }
-        return view('arvi.frontend.page-not-available');
+        return view('arvi.page-not-available');
     }
 
     public function edit(Request $request)

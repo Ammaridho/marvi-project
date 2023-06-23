@@ -112,7 +112,7 @@ pipeline {
                     echo "Delivering for branch: ${env.ENV_NAME}"
                     if(name == "prod") {
                         //echo 'OK Its going to be delivered through Ansible'
-                        ansiblePlaybook credentialsId: 'gcp-arvi', disableHostKeyChecking: true,
+                        ansiblePlaybook credentialsId: 'aws-arvi', disableHostKeyChecking: true,
                                         installation: 'ansible-2.5.1', inventory: 'ansible/hosts',
                                         playbook: 'ansible/deploy.prod.yml',
                                         extraVars: [
@@ -122,7 +122,7 @@ pipeline {
                     }
                     else if(name == "dev") {
                         echo "Delivering to DEV machine"
-                        ansiblePlaybook credentialsId: 'gcp-arvi', disableHostKeyChecking: true,
+                        ansiblePlaybook credentialsId: 'aws-arvi', disableHostKeyChecking: true,
                                         installation: 'ansible-2.5.1', inventory: 'ansible/hosts',
                                         playbook: 'ansible/deploy.dev.yml',
                                         extraVars: [

@@ -24,8 +24,9 @@ class StripeService
         \Stripe\Stripe::setApiKey(config('services.stripe.key'));
         header('Content-Type: application/json');
 
-        $cancelUrl = route('stripe-failed',['arviSessionId' => $payload->arviSessionId]);
-        $successUrl = route('stripe-success',['arviSessionId' => $payload->arviSessionId]);
+        
+        $cancelUrl = route('stripe-failed-flavar',['arviSessionId' => $payload->arviSessionId,'cancelUrl' => $payload->cancelUrl]);
+        $successUrl = route('stripe-success-flavar',['arviSessionId' => $payload->arviSessionId,'successUrl' => $payload->successUrl]);
 
         if ( sizeof($payload->entries) < 1) {
             \Log::error("Can't process payment, payload data is empty. SessionId: " . $payload->arviSessionId);
@@ -36,44 +37,28 @@ class StripeService
         \Log::info('>> Going to process: ' . json_encode($payload));
 
         $dataLines = array();
+        // products cart
         foreach ($payload->entries as $entry) {
-            $p = array(
-                'name'          => $entry->name,
-                'description'   => $entry->description,
-            );
-            if (is_array($entry->images) && sizeof($entry->images) > 0) {
-                $imgs = array();
-                for($i = 0; $i < sizeof($entry->images); $i++) {
-                    $imgs[$i] = $entry->images[$i];
-                }
-                $p['images'] = $imgs;
-            }
-            $mm = array();
-            if (!empty($entry->sku)) {
-                $mm['sku'] = $entry->sku;
-            }
-            if (is_array($entry->metadata) && sizeof($entry->metadata) > 0) {
-                $mm[] = $entry->metadata;
-            }
-            if (sizeof($mm) > 0) {
-                $p['metadata'] = $mm;
-            }
 
-            $a = array(
+            $product_data = array(
+                'name'          => $entry['product']['name'],
+                'description'   => $entry['product']['description'],
+            );
+            $price_data = array(
                 'currency'              => $payload->currency,
-                'product_data'          => $p,
-                'unit_amount_decimal'   => $entry->unitAmountDecimalInCents
+                'product_data'          => $product_data,
+                'unit_amount_decimal'   => $entry['totalPricePerProduct']*100
             );
-            $e = array(
-                'price_data' => $a,
-                'quantity'   => $entry->quantity,
+            $line_item = array(
+                'price_data' => $price_data,
+                'quantity'   => $entry['qty'],
             );
-            $dataLines[] = $e;
+            $line_items[] = $line_item;
         }
 
         //Initiate to Stripe
         $basicData = [
-            'line_items' => $dataLines,
+            'line_items' => $line_items,
             'mode' => 'payment',
             'success_url' => $successUrl,
             'cancel_url' => $cancelUrl,
@@ -92,8 +77,10 @@ class StripeService
         $payload->sessionId = $checkout_session->id;
         $this->updateMerchantOrderSessionId($payload->arviSessionId, $payload->sessionId);
 
-        //return redirect($checkout_session->url);
-        return $checkout_session->url;
+        // return redirect($checkout_session->url);
+        return response()->json(['stripe_url'=>$checkout_session->url]);
+
+        // SUDAH BISA MEMUNCULKAN LINK PEMBAYARAN
     }
 
 

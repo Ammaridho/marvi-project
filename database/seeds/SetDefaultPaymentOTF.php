@@ -16,7 +16,7 @@ class SetDefaultPaymentOTF extends Seeder
     {
         $data = [
             [
-                'merchant_id'           => 1,
+                'merchant_id'           => DB::table('merchants')->where('name','Bootstrap')->first()->id,
                 'payment_method_id'     => 1,
                 'payment_provider_id'   => 1,
                 'active'                => 1,
@@ -25,7 +25,7 @@ class SetDefaultPaymentOTF extends Seeder
                 'currency'              => 'SGD',
             ],
             [
-                'merchant_id'           => 1,
+                'merchant_id'           => DB::table('merchants')->where('name','Bootstrap')->first()->id,
                 'payment_method_id'     => 2,
                 'payment_provider_id'   => 1,
                 'active'                => 1,

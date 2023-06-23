@@ -10,7 +10,7 @@
     DEVAR: X
     DIR_DEPLOY: "{{project}}"
     TARGET_DEPLOY_USER: appjenkins
-    TARGET_DEPLOY_PATH: "/home/{{TARGET_DEPLOY_USER}}/temp-dev"
+    TARGET_DEPLOY_PATH: "/home/{{TARGET_DEPLOY_USER}}/temp-arvi-dev"
     ZIP_NAME: "{{project}}.zip"
 
   tasks:

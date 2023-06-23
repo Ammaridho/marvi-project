@@ -1,31 +1,12 @@
 <html lang="en" data-assets-path="/arvi/backend-assets/">
   <head>
     <meta charset="utf-8" />
-    <metaname="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <metaname="viewport" content="width=device-width, initial-scale=1.0, 
+    user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <title>OOBE - Dashboard</title>
     <meta name="description" content="Oobe Bussiness Owners Platform" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" type="image/x-icon" href="/arvi/backend-assets/img/favicon/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
-    <link rel="stylesheet" href="/arvi/backend-assets/vendor/fonts/boxicons.css" />
-    <link rel="stylesheet" href="/arvi/backend-assets/vendor/libs/apex-charts/apex-charts.css" />
-    <link rel="stylesheet" href="/arvi/backend-assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="/arvi/backend-assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="/arvi/backend-assets/css/styles.css" />
-
-    <link rel="stylesheet" href="/arvi/backend-assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <link rel="stylesheet" type="text/css" href="//arvi/backend-assets/vendor/libs/datepicker/datepicker.css" />
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
-    <link rel="stylesheet" href="https://unpkg.com/nprogress@0.2.0/nprogress.css" />
-
-    <script src="/arvi/backend-assets/vendor/js/helpers.js"></script>
-    <script src="/arvi/backend-assets/js/config.js"></script>
+    @include('arvi/backend/plugin/header-plugin')
   </head>
 
   <body>
@@ -36,18 +17,22 @@
 
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
-            <a href="index.php" class="app-brand-link">
-              <span class="app-brand-text demo menu-text fw-bolder ms-2">OOBE</span>
+            <a href="javascript:void(0);" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <img src="/arvi/backend-assets/img/logo/oobe-logo-horizontal-dt.png" />
+              </span>
             </a>
 
-            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <a href="javascript:void(0);" 
+            class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
               <i class="bx bx-chevron-left bx-sm align-middle"></i>
             </a>
           </div>
 
           <div class="menu-inner-shadow"></div>
 
-          <ul class="menu-inner py-1">
+          <ul class="menu-inner py-1 mt-3">
+            @if (!(auth()->user()->role == 'superadmin' && $companyCode == 'superAdmin'))
             <!-- Dashboard -->
             <li class="menu-item active">
               <a href="javascript:void(0)" id="dashboard-button" class="menu-link">
@@ -55,52 +40,199 @@
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
             </li>
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Reporting</span>
-            </li>
-
-            <li class="menu-item"> <a href="javascript:void(0)" class="menu-link" id="order-button"> <i class="menu-icon tf-icons bx bx-store-alt"></i> <div data-i18n="Order">Orders</div></a></li>
-            <li class="menu-item"> <a href="javascript:void(0)" class="menu-link" id="product-plan-button"> <i class="menu-icon tf-icons bx bx-calendar-check"></i> <div data-i18n="Order">Production Plans</div></a></li>
-            <li class="menu-item"> <a href="javascript:void(0)" class="menu-link" id="delivery-drop-point-button"> <i class="menu-icon tf-icons bx bx-package"></i> <div data-i18n="Order">Delivery Drop Point</div></a></li>
-            
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Store</span>
-            </li>
             <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle" id="tab-store-settings">
-                <i class="menu-icon tf-icons bx bx-wrench"></i>
-                <div data-i18n="Account Settings">Store Settings</div>
+              <a href="javascript:void(0)" class="menu-link menu-toggle" id="insight-button">
+                <i class="menu-icon tf-icons bx bx-pie-chart"></i>
+                <div data-i18n="Insights">Insights</div>
               </a>
               <ul class="menu-sub">
-                {{-- <li class="menu-item">
-                  <a href="page-store-front.php" class="menu-link">
-                    <div data-i18n="Live Chat">Store Front</div>
+                <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" id="insight-sales-button">
+                    <div data-i18n="Sales">Sales</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="page-fee.php" class="menu-link">
-                    <div data-i18n="Live Chat">Fees</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Live Chat">Billing & Payouts</div>
-                  </a>
-                </li> --}}
-                <li class="menu-item">
-                  <a href="javascript:void(0)" class="menu-link" id="account-button">
-                    <div data-i18n="Live Chat">Account</div>
+                  <a href="javascript:void(0)" class="menu-link" id="insight-qr-button">
+                    <div data-i18n="QR Code">QR Code</div>
                   </a>
                 </li>
               </ul>
             </li>
-
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Products</span>
+            <li class="menu-item">
+              <a href="javascript:void(0)" class="menu-link" id="order-list-button">
+                <i class="menu-icon tf-icons bx bx-line-chart"></i>
+                <div data-i18n="Reports">Order List</div>
+              </a>
             </li>
-            <li class="menu-item"> <a href="javascript:void(0)" id="product-button" class="menu-link"> <i class="menu-icon tf-icons bx bx-list-ul"></i> <div data-i18n="Order">List of Products</div></a></li>
+            <li class="menu-item"> 
+              <a href="javascript:void(0)" class="menu-link" id="pos-button">
+                <i class="menu-icon tf-icons bx bx-money"></i> 
+                <div data-i18n="Reports">POS</div>
+              </a>
+            </li>
+
+
+            {{-- Store --}}
+            <li class="menu-header small text-uppercase">
+              <span class="menu-header-text">Store</span>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0)" id="manage-brand-button" class="menu-link">
+                <i class="menu-icon tf-icons bx bxs-medal"></i>
+                <div data-i18n="Order">Manage Brand</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0)" id="manage-store-button" class="menu-link">
+                <i class="menu-icon tf-icons bx bxs-store"></i>
+                <div data-i18n="Order">Manage Store</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0)" class="menu-link menu-toggle" id="tab-store-settings">
+                <i class="menu-icon tf-icons bx bx-wrench"></i>
+                <div data-i18n="Account Settings">Fee & Discount</div>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" id="fees-button">
+                    <div data-i18n="Live Chat">Fees</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" id="discounts-button">
+                    <i class="menu-icon tf-icons bx bx-purchase-tag"></i>
+                    <div data-i18n="Discounts">Discounts</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0)" class="menu-link">
+                <i class="menu-icon tf-icons bx bxs-wallet-alt"></i> 
+                <div data-i18n="Order">Billing & Payouts</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0)" class="menu-link" id="account-button">
+                <i class="menu-icon tf-icons bx bxs-user-account"></i> 
+                <div data-i18n="Order">Manage Accounts</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0)" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-help-circle"></i>
+                <div data-i18n="Account Settings">Help Center</div>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item active">
+                  <a href="javascript:void(0)" class="menu-link">
+                    <div data-i18n="Help Center">Help Center</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link">
+                    <div data-i18n="Live Chat">Live Chat</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            @endif
+
+            {{-- beckend --}}
+            @if (auth()->user()->role == 'superadmin' && $companyCode == 'superAdmin')
+            <li class="menu-header small text-uppercase">
+              <span class="menu-header-text">Backend</span>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-atom"></i>
+                    <div data-i18n="Account Settings">Administration</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                    <a href="javascript:void(0)" class="menu-link" id="manage-company">
+                        <div data-i18n="Help Center">Manage Company</div>
+                    </a>
+                    </li>
+                    <li class="menu-item">
+                    <a href="javascript:void(0)" class="menu-link" id="manage-account-admin">
+                        <div data-i18n="Help Center">Manage Accounts</div>
+                    </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0)" class="menu-link" id="manage-location-admin">
+                    <i class="menu-icon tf-icons bx bxs-location-plus"></i>
+                    <div data-i18n="Manage Location">Manage Location</div>
+                </a>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-ghost"></i>
+                <div data-i18n="Account Settings">Manage Squad</div>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link">
+                    <div data-i18n="Manage Squad">Squad Monitoring</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" id="manage-squad-account-admin">
+                    <div data-i18n="Manage Squad">Squad Account</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="javascript:void(0)" class="menu-link" id="manage-squad-settlement-admin">
+                    <div data-i18n="Manage Squad Settlement">Squad Settlement</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-heart-circle"></i>
+                <div data-i18n="Account Settings">Marketing</div>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link" id="manage-banner">
+                    <div data-i18n="Manage Squad">Manage Banner</div>
+                  </a>
+                </li>
+              </ul>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link" id="manage-qr">
+                    <div data-i18n="Manage Qr">Manage QR</div>
+                  </a>
+                </li>
+              </ul>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link" id="manage-ar">
+                    <div data-i18n="Manage Ar">Manage AR</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-package"></i>
+                <div data-i18n="Account Settings">Fullfilment</div>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link" id="manage-delivery">
+                    <div data-i18n="Manage Squad">Delivery Method</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          @endif
           </ul>
         </aside>
         <!-- / Menu -->
 
-        

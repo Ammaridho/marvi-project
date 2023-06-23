@@ -123,7 +123,7 @@ aria-labelledby="edit-product-modalLabel" aria-hidden="true">
     id = 1;
     $.ajax({
       type: 'POST',
-      url: "{{ route('product-edit',['qrCode' => $qrCode]) }}",
+      url: "{{ route('product-edit',['companyCode' => $companyCode]) }}",
       data: $(this).serialize(),
       success: function (data) {
         $('#edit-product-modal').trigger("click");
@@ -131,8 +131,6 @@ aria-labelledby="edit-product-modalLabel" aria-hidden="true">
 
       },
       error: function (data) {
-        console.log(data);
-        alert('Masukkan Data dengan Lengkap!');
         console.log(data);
       }
     })
